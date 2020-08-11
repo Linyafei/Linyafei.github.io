@@ -22,7 +22,7 @@
 
   <!--Open Graph Title-->
   
-    <meta property="og:title" content="linyafei&#39;s blog"/>
+    <meta property="og:title" content="base64基础"/>
   
 
   <!--Open Graph Description-->
@@ -35,7 +35,7 @@
 
   <!--Type page-->
   
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
   
 
   <!--Page Cover-->
@@ -46,7 +46,7 @@
 
   <!-- Title -->
   
-  <title>Swift - linyafei&#39;s blog</title>
+  <title>base64基础 - linyafei&#39;s blog</title>
 
   <!-- Tachyons Core CSS -->
   <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
@@ -126,29 +126,14 @@
 
     <main id="layout_main">
         
-<div id="tag_list_background">
-    <div id="tag_list_type_title">#Swift</div>
+<article id="post_background">
+  <div id="post_title">base64基础</div>
+  <div id="post_time">2020-06-10</div>
 
-    
-
-    <section id="tag_list_section">
-        <div id="tag_list_title">
-            <a id="tag_list_link" href="/2019/06/02/ios1/">iOS App创建证书，添加Appid，创建配置文件流程</a>
-        </div>
-        <span id="tag_list_time">2019-06-02</span>
-    </section>
-    
-</div>
-
-
-
-
-
-
-
-
-
-
+  <div id="post_content"> <p>base64<br>在数据传输过程中经常会遇到乱码的问题(特别是使用非拉丁字母的时候)，这时就需要把数据转换成可以被广泛识别的编码形式，base64就是这样的，它会把数据按每3个字符一组转换成二进制数，每组24个字节(3*8=24),不是3的倍数是后面补一个或两个 ‘=’ ，然后把这24个字节分成4组(24/4=6),可以得到每6个字节一组，把每组数据再转换成十进制得到十进制数，按照得到的十进制数查定义的base64表，就可以得到转换后的数据，base64的字母表只包含，A<del>Z,a</del>z,0~9,+,/ 这些字符，也可以自己定义。</p>
+<p>优点：可以避免乱码或一些浏览器无法识别的字符问题<br>缺点：文件会增加大概 33%<br>在终端中用 base64 a.txt 可以对a.txt 里的文件加密</p>
+ </div>
+</article>
 
     </main>
 
