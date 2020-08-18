@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="排序"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>排序 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">排序</div>
+  <div id="post_time">2019-06-04</div>
+
+  <div id="post_content"> <p>public class MySort {<br>    public static void main(String[] args) {<br>        SortTest st = new SortTest();<br>        int[] array = {2, 1, 5, 9, 4, 0, 6, 3, 8, 7};<br>        //int[] sortArray = st.bubbleSort(array);<br>        //int[] sortArray = st.selectSort(array);<br>        //int[] sortArray = st.insertSort(array);<br>        int[] sortArray = st.quicksort(array,0,array.length-1);<br>        //int[] sortArray = st.shellSort(array);<br>        //st.mergeSort(array, new int[array.length], 0, array.length - 1);<br>        for (int i = 0; i &lt; sortArray.length; i++) {<br>            System.out.print(“==” + array[i]);<br>        }<br>    }<br>}<br>class SortTest {<br>    public SortTest() {}<br>    // 冒泡排序 时间复杂度 O(n2)n的平方<br>    int[] bubbleSort(int[] sortArray) {<br>        for (int i=0 ; i&lt;sortArray.length ; i++) {<br>            for (int j=i+1 ; j&lt;sortArray.length ; j++) {<br>                if (sortArray[i] &gt; sortArray[j]) {<br>                    int tmpValue = sortArray[i];<br>                    sortArray[i] = sortArray[j];<br>                    sortArray[j] = tmpValue;<br>                }<br>            }<br>        }<br>        return sortArray;<br>    }<br>    // 冒泡排序 方法2<br>    int[] bubbleSort2(int[] sortArray) {<br>        for (int i=0 ; i&lt;sortArray.length ; i++) {<br>            for (int j=0 ; j&lt;sortArray.length-1-i ; j++) {<br>                if (sortArray[j] &gt; sortArray[j+1]) {<br>                    int tmpValue = sortArray[j];<br>                    sortArray[j] = sortArray[j+1];<br>                    sortArray[j+1] = tmpValue;<br>                }<br>            }<br>        }<br>        return sortArray;<br>    }<br>    // 选择排序 时间复杂度 O(n2)n的平方<br>    int[] selectSort(int[] sortArray) {<br>        for (int i=0 ; i&lt;sortArray.length ; i++) {<br>            int minIndex = i;<br>            for (int j=i+1; j&lt; sortArray.length ; j++) {<br>                if (sortArray[minIndex] &gt; sortArray[j]) {<br>                    minIndex = j;<br>                }<br>            }<br>            if (i != minIndex) {<br>                int tmpValue = sortArray[i];<br>                sortArray[i] = sortArray[minIndex];<br>                sortArray[minIndex] = tmpValue;<br>            }<br>        }<br>        return sortArray;<br>    }<br>    // 插入排序 时间复杂度 O(n2)n的平方<br>    int[] insertSort(int[] sortArray) {<br>        for (int i=1 ; i&lt;sortArray.length ; i++) {<br>            int tmpValue = sortArray[i];<br>            int j = i - 1;<br>            while (j &gt;= 0 &amp;&amp; sortArray[j] &gt; tmpValue) {<br>                sortArray[j+1] = sortArray[j];<br>                j–;<br>            }<br>            sortArray[j+1] = tmpValue;<br>        }<br>        return sortArray;<br>    }<br>    // 快速排序,二分排序,折半排序 时间复杂度 O(nlogn)<br>    int[] quicksort(int sortArray[],int start,int end) {<br>        int midValue = sortArray[start];<br>        int left = start;<br>        int right = end;<br>        while (left &lt; right) {<br>            while ((left &lt; right) &amp;&amp; (sortArray[right] &gt; midValue)) {<br>                right–;<br>            }<br>            while ((left &lt; right) &amp;&amp; (sortArray[left] &lt; midValue)) {<br>                left++;<br>            }<br>            if ((sortArray[left] == sortArray[right]) &amp;&amp; (left &lt; right)) {<br>                left++;<br>            } else {<br>                int temp = sortArray[left];<br>                sortArray[left] = sortArray[right];<br>                sortArray[right] = temp;<br>            }<br>        }<br>        if (left - 1 &gt; start) sortArray = quicksort(sortArray, start, left - 1);<br>        if (right + 1 &lt; end) sortArray = quicksort(sortArray, right + 1, end);<br>        return sortArray;<br>    }<br>    // 希尔排序 缩小增量排序 时间复杂度 O(n2)n的平方<br>    int[] shellSort(int[] sortArray) {<br>        int gap = sortArray.length/2;<br>        while (gap &gt;= 1) {<br>            int i = gap;<br>            while (i &lt; sortArray.length) {<br>                int tmpValue = sortArray[i];<br>                int j = i - gap;<br>                while (j &gt;= 0 &amp;&amp; tmpValue &lt; sortArray[j]) {<br>                    sortArray[j+gap] = sortArray[j];<br>                    j = j - gap;<br>                }<br>                if (j != (i - gap)) {<br>                    sortArray[j+gap] = tmpValue;<br>                }<br>                i++;<br>            }<br>            gap = gap/2;<br>        }<br>        return sortArray;<br>    }<br>    // 归并排序 时间复杂度 O(nlogn)<br>    void mergeSort(int[] arr, int[] result, int lefts, int rights) {<br>        if (lefts &gt;= rights)<br>            return;<br>        int mid = (rights - lefts)/2 + lefts;<br>        int left1 = lefts, right1 = mid;<br>        int left2 = mid + 1, right2 = rights;<br>        mergeSort(arr, result, left1, right1);<br>        mergeSort(arr, result, left2, right2);<br>        int k = lefts;<br>        while (left1 &lt;= right1 &amp;&amp; left2 &lt;= right2)<br>            result[k++] = arr[left1] &lt; arr[left2] ? arr[left1++] : arr[left2++];<br>        while (left1 &lt;= right1)<br>            result[k++] = arr[left1++];<br>        while (left2 &lt;= right2)<br>            result[k++] = arr[left2++];<br>        for (k = lefts; k &lt;= rights; k++)<br>            arr[k] = result[k];<br>    }<br>}</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="Flutter 调用原生iOS视图"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>Flutter 调用原生iOS视图 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">Flutter 调用原生iOS视图</div>
+  <div id="post_time">2020-04-11</div>
+
+  <div id="post_content"> <p>在Flutter中有些功能不太好实现，可以调用原生的视图实现其功能。再试就需要用到两个Flutter组件，AndroidView和UiKitView,通过这两个组件调用原生，Flutter调用原生需要通过插件实现，即Flutter调用插件的Flutter组件，再在插件中调用iOS视图。</p>
+<p>1 创建插件，在插件lib文件夹中创建一个组件如下</p>
+<p>class NativebuttonPage extends StatefulWidget {<br>  NativebuttonPage({Key key}):super(key:key);<br>  @override<br>  _NativebuttonPageState createState() =&gt; _NativebuttonPageState();<br>}<br>class _NativebuttonPageState extends State<NativebuttonPage> {<br>  @override<br>  Widget build(BuildContext context) {<br>    if(defaultTargetPlatform == TargetPlatform.iOS) {<br>      return Container(<br>        width: 300,<br>        height: 200,<br>        color: Colors.cyan,<br>        child: UiKitView(<br>          viewType: “nativebutton”,<br>          onPlatformViewCreated:(){ },<br>          creationParamsCodec: StandardMessageCodec(),<br>        ),<br>      );<br>    }<br>    return Text(‘activity_indicator插件尚不支持$defaultTargetPlatform ‘);<br>  }<br>}</p>
+<p>2 在插件模块中用Xcode打开iOS ，在Pods 下找到Classes文件夹(比较深一级一级找)  ，会有一个系统创建的文件如下<br>#import &lt;Flutter/Flutter.h&gt;<br>@interface XXXPlugin : NSObject<FlutterPlugin><br>@end</p>
+<p>#import “NativebuttonPlugin.h”<br>#import “FlutterButton.h”</p>
+<p>@implementation NativebuttonPlugin</p>
+<ul>
+<li>(void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {<br>  FlutterButtonFactory *flutterButtonFactory = [[FlutterButtonFactory alloc] initWithMessenger:registrar.messenger];<br>  [registrar registerViewFactory:flutterButtonFactory withId:@”nativebutton”];<br>}<br>@end</li>
+</ul>
+<p>3 自己创建两个文件用以显示原生的视图 如下<br>#import &lt;Foundation/Foundation.h&gt;<br>#import &lt;Flutter/Flutter.h&gt;</p>
+<p>@interface FlutterButtonFactory : NSObject<FlutterPlatformViewFactory><br>-(instancetype)initWithMessenger:(NSObject<FlutterBinaryMessenger>*)messager;<br>@end</p>
+<p>@interface FlutterButtonController : NSObject<FlutterPlatformView><br>-(instancetype)initWithWithFrame:(CGRect)frame<br>                   viewIdentifier:(int64_t)viewId<br>                        arguments:(id _Nullable)args<br>                  binaryMessenger:(NSObject<FlutterBinaryMessenger>*)messenger;<br>@end</p>
+<p>#import “FlutterButton.h”<br>@implementation FlutterButtonFactory<br>{<br>    NSObject<FlutterBinaryMessenger>*_messenger;<br>}</p>
+<ul>
+<li>(instancetype)initWithMessenger:(NSObject<FlutterBinaryMessenger> *)messager<br>{<br>  self = [super init];<br>  if (self) {<pre><code>  _messenger = messager;</code></pre>
+  }<br>  return self;<br>}</li>
+<li>(NSObject<FlutterMessageCodec> *)createArgsCodec<br>{<br>   return [FlutterStandardMessageCodec sharedInstance];<br>}</li>
+<li>(NSObject<FlutterPlatformView> *)createWithFrame:(CGRect)frame viewIdentifier:(int64_t)viewId arguments:(id)args<br>{<br>  FlutterButtonController *flutterButtonController = [[FlutterButtonController alloc] initWithWithFrame:frame viewIdentifier:viewId arguments:args binaryMessenger:_messenger];<br>   return flutterButtonController;<br>}<br>@end</li>
+</ul>
+<p>@implementation FlutterButtonController<br>{<br>    int64_t _viewId;<br>    FlutterMethodChannel* _channel;<br>    UIButton *_button;<br>}</p>
+<ul>
+<li><p>(instancetype)initWithWithFrame:(CGRect)frame viewIdentifier:(int64_t)viewId arguments:(id)args binaryMessenger:(NSObject<FlutterBinaryMessenger> *)messenger<br>{<br>  if ([super init]) {</p>
+<pre><code>      _button = [UIButton buttonWithType:UIButtonTypeCustom];
+     _button.frame = frame;
+     _button.backgroundColor = UIColor.redColor;
+     [_button addTarget:self action:@selector(clickEvent) forControlEvents:UIControlEventTouchUpInside];
+
+  _channel = [FlutterMethodChannel methodChannelWithName:@&quot;abcdef&quot; binaryMessenger:messenger];
+  __weak __typeof__(self) weakSelf = self;
+  [_channel setMethodCallHandler:^(FlutterMethodCall *  call, FlutterResult  result) &#123;
+      [weakSelf onMethodCall:call result:result];
+  &#125;];</code></pre>
+<p>  }<br>  return self;<br>}</p>
+</li>
+</ul>
+<p>-(UIView <em>)view<br>{<br>    return _button;<br>}<br>-(void)onMethodCall:(FlutterMethodCall</em>)call result:(FlutterResult)result<br>{<br>    if ([[call method] isEqualToString:@”start”]) {<br>        NSLog(@”———-aaaaaaaaaaa———“);<br>    }else if ([[call method] isEqualToString:@”stop”]){<br>        NSLog(@”———-bbbbbbbbbbbb———“);<br>    } else {<br>        result(FlutterMethodNotImplemented);<br>    }<br>}<br>-(void)clickEvent<br>{<br>    NSLog(@”———-clickEvent———“);<br>}<br>@end</p>
+<p>4 创建一个Flutter项目，引入上面创建的插件，此时在Flutter项目的iOS的plist文件中添加 io.flutter.embedded_views_preview 选择YES </p>
+<p>5 在Flutter组件中引用插件里的组件  NativebuttonPage() 即可显示原生iOS里的视图</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

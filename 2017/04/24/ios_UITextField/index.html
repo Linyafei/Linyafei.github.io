@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS 文字限制"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS 文字限制 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS 文字限制</div>
+  <div id="post_time">2017-04-24</div>
+
+  <div id="post_content"> <p>#import &lt;UIKit/UIKit.h&gt;<br>@interface TextLimitVC : UIViewController<br>@end</p>
+<p>#import “TextLimitVC.h”<br>#define MaxTextCount 10<br>@interface NSString(CLength)</p>
+<ul>
+<li>(NSUInteger)c_length;<br>@end</li>
+</ul>
+<p>@implementation NSString(CLength)</p>
+<ul>
+<li>(NSUInteger)c_length<br>{<br>  __block NSUInteger l = 0;<br>  [self enumerateSubstringsInRange:NSMakeRange(0, self.length) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable substring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {<pre><code>  l ++;</code></pre>
+  }];<br>  return l;<br>}<br>@end</li>
+</ul>
+<p>@interface TextLimitVC ()&lt;UITextViewDelegate,UITextInputTraits,UITextFieldDelegate&gt;<br>@property (nonatomic,strong)UITextView *textView;<br>@end<br>@implementation TextLimitVC</p>
+<ul>
+<li>(void)viewDidLoad {<br>  [super viewDidLoad];<br>  // Do any additional setup after loading the view.<pre><code>  UITextField *textField = [[UITextField alloc]initWithFrame:CGRectMake(20, 200, 300, 50)];
+  textField.font = [UIFont systemFontOfSize:14];
+  textField.textColor = UIColor.blackColor;
+  textField.delegate = self;
+  //textField.text = [NSString stringWithFormat:@&quot;%@&quot;,self.nickNameStr?:@&quot;&quot;];
+  [textField addTarget:self action:@selector(textFieldChangeTextField:) forControlEvents:UIControlEventEditingChanged];
+  textField.backgroundColor = UIColor.cyanColor;
+  [self.view addSubview:textField];</code></pre>
+</li>
+</ul>
+<p>//    self.textView = [[UITextView alloc]initWithFrame:CGRectMake(20, 100, 300, 100)];<br>//    self.textView.delegate = self;<br>//    self.textView.backgroundColor = UIColor.cyanColor;<br>//    [self.view addSubview:self.textView];<br>}<br>#pragma mark ———– 方法一 —————-<br>//- (void)textFieldChangeTextField:(UITextField *)textField<br>//{<br>//    UITextRange *selectedRange = [textField markedTextRange];<br>//    if(selectedRange == nil || selectedRange.empty) {<br>//        if (textField.text.length &gt; 6) {<br>//            textField.text = [textField.text substringToIndex:6];<br>//        }<br>//    }<br>//}<br>//#pragma mark ———– 方法二 —————-<br>//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text<br>//{<br>//    UITextRange *selectedRange = [textView markedTextRange];<br>//    UITextPosition *pos = [textView positionFromPosition:selectedRange.start offset:0];<br>//    if (selectedRange &amp;&amp; pos) {<br>//        NSInteger startOffset = [textView offsetFromPosition:textView.beginningOfDocument toPosition:selectedRange.start];<br>//        if (startOffset &lt; MaxTextCount) {<br>//            return YES;<br>//        }else{<br>//            return NO;<br>//        }<br>//    }<br>//    NSString *comcatstr = [textView.text stringByReplacingCharactersInRange:range withString:text];<br>//    NSInteger caninputlen = MaxTextCount - comcatstr.length;<br>//    if (caninputlen &gt;= 0) {<br>//        return YES;<br>//    }else{<br>//        NSInteger len = text.length + caninputlen;<br>//        NSRange rg  = {0,MAX(len, 0)};<br>//        if (rg.length &gt; 0) {<br>//            NSString *s = [text substringWithRange:rg];<br>//            [textView setText:[textView.text stringByReplacingCharactersInRange:range withString:s]];<br>//        }<br>//        return NO;<br>//    }<br>//}<br>//- (void)textViewDidChange:(UITextView *)textView<br>//{<br>//    UITextRange *selectedRange = [textView markedTextRange];<br>//    UITextPosition *pos = [textView positionFromPosition:selectedRange.start offset:0];<br>//    if (selectedRange &amp;&amp; pos) {<br>//        return;<br>//    }<br>//    NSString *nsTextContent = textView.text;<br>//    NSInteger existTextNum = nsTextContent.length;<br>//    if (existTextNum &gt; MaxTextCount) {<br>//        NSString *s = [nsTextContent substringToIndex:MaxTextCount];<br>//        [textView setText:s];<br>//    }<br>//}<br>#pragma mark ———– 方法三考虑到emoji情况下 —————-</p>
+<ul>
+<li><p>(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text<br>{<br>  UITextRange *selectedRange = [textView markedTextRange];<br>  UITextPosition *pos = [textView positionFromPosition:selectedRange.start offset:0];<br>  if (selectedRange &amp;&amp; pos) {</p>
+<pre><code>  NSInteger startOffset = [textView offsetFromPosition:textView.beginningOfDocument toPosition:selectedRange.start];
+  NSInteger endOffset = [textView offsetFromPosition:textView.beginningOfDocument toPosition:selectedRange.end];
+  NSRange offsetRange = NSMakeRange(startOffset, endOffset - startOffset);
+  if (offsetRange.location &lt; MaxTextCount) &#123;
+      return YES;
+  &#125;else&#123;
+      return NO;
+  &#125;</code></pre>
+<p>  }<br>  NSString *comcatstr = [textView.text stringByReplacingCharactersInRange:range withString:text];<br>  NSInteger caninputlen = MaxTextCount - comcatstr.c_length;<br>  if (caninputlen &gt;= 0) {</p>
+<pre><code>  return YES;</code></pre>
+<p>  }else{</p>
+<pre><code>  NSInteger len = text.c_length + caninputlen;
+  NSRange rg  = &#123;0,MAX(len, 0)&#125;;
+  if (rg.length &gt; 0) &#123;
+      NSString *s = [text substringWithRange:rg];
+      [textView setText:[textView.text stringByReplacingCharactersInRange:range withString:s]];
+  &#125;
+  return NO;</code></pre>
+<p>  }<br>}</p>
+</li>
+<li><p>(void)textViewDidChange:(UITextView *)textView<br>{<br>  UITextRange *selectedRange = [textView markedTextRange];<br>  UITextPosition *pos = [textView positionFromPosition:selectedRange.start offset:0];<br>  //如果在变化中是高亮部分在变，则不需要计算字符<br>  if (selectedRange &amp;&amp; pos) {</p>
+<pre><code>  return;</code></pre>
+<p>  }<br>  NSString *nsTextContent = textView.text;<br>  NSInteger existTextNum = nsTextContent.c_length;</p>
+<p>  if (existTextNum &gt; MaxTextCount) {</p>
+<pre><code>  NSString *s = [nsTextContent substringToIndex:MaxTextCount];
+  [textView setText:s];</code></pre>
+<p>  }<br>}<br>//完整内容<br>//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string<br>//{<br>//    NSString *comcatstr = [textField.text stringByReplacingCharactersInRange:range withString:string];<br>//    NSLog(@”===========%@=======”,comcatstr);<br>//    return YES;<br>//}<br>#pragma mark ———– 方法三考虑到emoji情况下 UITextField—————-</p>
+</li>
+<li><p>(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string<br>{<br>  UITextRange *selectedRange = [textField markedTextRange];<br>  UITextPosition *pos = [textField positionFromPosition:selectedRange.start offset:0];<br>  if (selectedRange &amp;&amp; pos) {</p>
+<pre><code>  NSInteger startOffset = [textField offsetFromPosition:textField.beginningOfDocument toPosition:selectedRange.start];
+  if (startOffset &lt; MaxTextCount) &#123;
+      return YES;
+  &#125;else&#123;
+      return NO;
+  &#125;</code></pre>
+<p>  }<br>  NSString *comcatstr = [textField.text stringByReplacingCharactersInRange:range withString:string];<br>  NSInteger caninputlen = MaxTextCount - comcatstr.length;<br>  if (caninputlen &gt;= 0) {</p>
+<pre><code>  return YES;</code></pre>
+<p>  }else{</p>
+<pre><code>  NSInteger len = string.length + caninputlen;
+  NSRange rg  = &#123;0,MAX(len, 0)&#125;;
+  if (rg.length &gt; 0) &#123;
+      NSString *s = [string substringWithRange:rg];
+      [textField setText:[textField.text stringByReplacingCharactersInRange:range withString:s]];
+  &#125;
+  return NO;</code></pre>
+<p>  }<br>}</p>
+</li>
+<li><p>(void)textFieldChangeTextField:(UITextField *)textField<br>{<br>  UITextRange *selectedRange = [textField markedTextRange];<br>  UITextPosition *pos = [textField positionFromPosition:selectedRange.start offset:0];<br>  if (selectedRange &amp;&amp; pos) {</p>
+<pre><code>  return;</code></pre>
+<p>  }<br>  NSString *nsTextContent = textField.text;<br>  NSInteger existTextNum = nsTextContent.length;<br>  if (existTextNum &gt; MaxTextCount) {</p>
+<pre><code>  NSString *s = [nsTextContent substringToIndex:8];
+  [textField setText:s];</code></pre>
+<p>  }<br>}<br>@end</p>
+</li>
+</ul> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

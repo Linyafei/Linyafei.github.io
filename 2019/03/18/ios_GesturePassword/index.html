@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS 手势解锁屏幕"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS 手势解锁屏幕 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS 手势解锁屏幕</div>
+  <div id="post_time">2019-03-18</div>
+
+  <div id="post_content"> <p>Header.h<br>#ifndef Header_h<br>#define Header_h</p>
+<p>#define kCircularRadius 30.0//圆半径<br>#define kEdgeMargin 30 //圆的边缘<br>#define kMidMargin ([UIScreen mainScreen].bounds.size.width - 60 - kCircularRadius * 6 - kEdgeMargin * 2)/2 //圆的间距</p>
+<p>#define kLineWidth 4.0//线宽<br>#define kPasswordMinLength 4//最短密码</p>
+<p>//圆的颜色<br>#define kCircularColor [UIColor colorWithRed:213/255.0 green:219/255.0 blue:232/255.0 alpha:1/1.0]//内圆颜色<br>#define kOutCircularColor [UIColor clearColor]//外圆颜色<br>//圆的高光颜色<br>#define kCircularHighlightColor [UIColor colorWithRed:43/255.0 green:111/255.0 blue:249/255.0 alpha:1/1.0]//圆高亮色<br>#define kOutCircularHighlightColor [UIColor colorWithRed:244/255.0 green:248/255.0 blue:254/255.0 alpha:1.0]//高亮外圆颜色<br>#define kLineColor kCircularHighlightColor//线颜色<br>//错误是的颜色<br>#define kCircularErrorColor [UIColor colorWithRed:255/255.0 green:80/255.0 blue:62/255.0 alpha:1/1.0]//错误圆高亮色<br>#define kOutLineErrorColor [UIColor colorWithRed:255/255.0 green:246/255.0 blue:245/255.0 alpha:1/1.0]//错误高亮外圆颜色<br>#define kLineErrorColor kCircularErrorColor//线颜色<br>#define kSelectPointColor [UIColor colorWithRed:220/255.0 green:220/255.0 blue:220/255.0 alpha:1/1.0];</p>
+<p>#endif /* Header_h */</p>
+<p>#import &lt;UIKit/UIKit.h&gt;<br>@interface GesturePasswordVC : UIViewController<br>@end</p>
+<p>#import “GesturePasswordVC.h”<br>#import “LYFPasswordView.h”<br>#import “LYFPasswordLineLayer.h”<br>#import “Header.h”<br>#import “LYFSetPasswordView.h”</p>
+<p>@interface GesturePasswordVC ()<SetPasswordViewDelegate><br>@property (nonatomic,strong) UIImageView *imgView;<br>//@property (nonatomic,strong) LYFPasswordView *passwordView;<br>@property (nonatomic,strong) LYFSetPasswordView *setPasswordView;</p>
+<p>@property (nonatomic,strong) UILabel *promptLabel;<br>@property (nonatomic,strong) UIButton *selectButton;<br>@property (nonatomic,strong) NSMutableArray *buttonArrM;<br>@end</p>
+<p>@implementation GesturePasswordVC</p>
+<ul>
+<li><p>(void)viewDidLoad {<br>  [super viewDidLoad];<br>  // Do any additional setup after loading the view.<br>  [self createPromptView];<br>  [self createPasswordView];<br>  //    [self createButton];<br>}</p>
+</li>
+<li><p>(void)createPromptView<br>{<br>  UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(16, 43, 60, 40)];<br>  label1.font = [UIFont systemFontOfSize:45];<br>  label1.textColor = [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:1/1.0];<br>  label1.text = @”28”;<br>  [self.view addSubview:label1];<br>  //label1.backgroundColor = [UIColor lightGrayColor];</p>
+<p>  UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(label1.frame), CGRectGetMaxY(label1.frame) - 20, 40, 20)];<br>  label2.font = [UIFont systemFontOfSize:22];<br>  label2.textColor = [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:1/1.0];<br>  label2.text = @”Nov”;<br>  [self.view addSubview:label2];</p>
+<p>  UILabel *label3 = [[UILabel alloc]initWithFrame:CGRectMake(16, CGRectGetMaxY(label1.frame), self.view.frame.size.width - 36, 22)];<br>  label3.font = [UIFont systemFontOfSize:14];<br>  label3.textColor = [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:1/1.0];<br>  label3.text = @”唯一有吸引力的世界,是尚未踏足的世界”;<br>  [self.view addSubview:label3];</p>
+<p>  self.buttonArrM = [[NSMutableArray alloc]init];<br>  for (NSInteger i=0; i&lt;9; i++) {</p>
+<pre><code>  UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+  button.frame = CGRectMake(self.view.frame.size.width/2 - 40 + i%3 * 30, CGRectGetMaxY(label3.frame) + 30 + i/3 *30, 10, 10);
+  button.clipsToBounds = YES;
+  button.layer.cornerRadius = 5;
+  button.backgroundColor = kSelectPointColor;
+  [self.view addSubview:button];
+  [self.buttonArrM addObject:button];</code></pre>
+<p>  }</p>
+<p>  UILabel *label4 = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(label3.frame) + 140, self.view.frame.size.width, 20)];<br>  label4.font = [UIFont systemFontOfSize:16];<br>  label4.textColor = [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:1/1.0];<br>  label4.text = @”Nov”;<br>  label4.textAlignment = NSTextAlignmentCenter;<br>  [self.view addSubview:label4];<br>  _promptLabel = label4;<br>  //label4.backgroundColor = [UIColor lightGrayColor];<br>}</p>
+</li>
+<li><p>(void)createPasswordView<br>{<br>  LYFSetPasswordView *pswView=[[LYFSetPasswordView alloc]initWithFrame:CGRectMake(30, CGRectGetMaxY(_promptLabel.frame), self.view.frame.size.width - 60, self.view.frame.size.width - 60)];<br>  pswView.delegate = self;<br>  [self.view addSubview:pswView];<br>  _setPasswordView = pswView;<br>}</p>
+</li>
+<li><p>(void)newSetPasswordView:(LYFSetPasswordView *)passwordView withPassword:(NSArray *)password<br>{<br>  NSLog(@”password == %@”,password);<br>  for (NSInteger i = 0; i &lt; password.count; i++) {</p>
+<pre><code>  NSInteger pointId = [[password objectAtIndex:i] intValue];
+  UIButton *btn = _buttonArrM[pointId];
+  btn.backgroundColor = [UIColor redColor];</code></pre>
+<p>  }<br>  [self performSelector:@selector(delayActionSel) withObject:self afterDelay:1];<br>}</p>
+</li>
+<li><p>(void)delayActionSel<br>{<br>  for (NSInteger i = 0; i &lt; 9; i++) {</p>
+<pre><code>  UIButton *btn = _buttonArrM[i];
+  btn.backgroundColor = kSelectPointColor;</code></pre>
+<p>  }<br>}<br>@end</p>
+</li>
+</ul>
+<p>#import &lt;QuartzCore/QuartzCore.h&gt;<br>@interface LYFPasswordLineLayer : CALayer<br>/*<br> 输入状态<br> 1 输入正确<br> 2 输入错误<br> 3 未输入<br> */<br>@property (nonatomic,assign) NSInteger inputState;<br>@property (nonatomic,strong) NSArray *pointIDs;<br>@property (nonatomic) CGPoint nowPoint;<br>@end</p>
+<p>#import “LYFPasswordLineLayer.h”<br>#import &lt;UIKit/UIKit.h&gt;<br>#import “Header.h”<br>@implementation LYFPasswordLineLayer</p>
+<ul>
+<li><p>(void)drawInContext:(CGContextRef)ctx<br>{<br>  if(_pointIDs.count&lt;=0){</p>
+<pre><code>  return;</code></pre>
+<p>  }<br>  if (self.inputState == 2) {</p>
+<pre><code>  CGFloat *ColorComponents = (CGFloat *)CGColorGetComponents(kLineErrorColor.CGColor);
+  CGContextSetRGBStrokeColor (ctx, ColorComponents[0], ColorComponents[1], ColorComponents[2], ColorComponents[3]);</code></pre>
+<p>  }else{</p>
+<pre><code>  CGFloat *ColorComponents = (CGFloat *)CGColorGetComponents([kLineColor CGColor]);
+  CGContextSetRGBStrokeColor (ctx, ColorComponents[0], ColorComponents[1], ColorComponents[2], ColorComponents[3]);</code></pre>
+<p>  }</p>
+<p>  CGContextSetLineWidth(ctx, kLineWidth);<br>  CGContextSetLineJoin(ctx, kCGLineJoinRound);</p>
+<p>  //获取第一个点<br>  NSInteger pointId = [[_pointIDs objectAtIndex:0] intValue];<br>  CGPoint pointCenter = [self getPointWithId:pointId];//获取点的位置<br>  CGContextMoveToPoint(ctx, pointCenter.x, pointCenter.y);//移动到该点上</p>
+<p>  //获取剩下的点<br>  for (NSInteger i = 1; i &lt; _pointIDs.count; i++) {</p>
+<pre><code>  pointId = [[_pointIDs objectAtIndex:i] intValue];
+  pointCenter = [self getPointWithId:pointId];//获取点的位置
+  CGContextAddLineToPoint(ctx, pointCenter.x, pointCenter.y);//添加一个新点</code></pre>
+<p>  }<br>  //移动到当前位置(包括在点上或不在点上)<br>  pointCenter = _nowPoint;<br>  CGContextAddLineToPoint(ctx, pointCenter.x, pointCenter.y);<br>  CGContextDrawPath(ctx, kCGPathStroke);<br>}<br>#pragma mark – 获取点的位置 –</p>
+</li>
+<li><p>(CGPoint)getPointWithId:(NSInteger)circleId<br>{<br>  CGFloat x = kEdgeMargin + kCircularRadius + circleId % 3 * (kCircularRadius * 2 + kMidMargin);<br>  CGFloat y = kEdgeMargin + kCircularRadius + circleId / 3 * (kCircularRadius * 2 + kMidMargin);<br>  CGPoint point = CGPointMake(x, y);<br>  return point;<br>}<br>@end</p>
+</li>
+</ul>
+<p>#import &lt;QuartzCore/QuartzCore.h&gt;<br>@interface LYFPasswordPointLayer : CALayer<br>/*<br> 输入状态<br> 1 输入正确<br> 2 输入错误<br> 3 未输入<br> */<br>@property (nonatomic,assign) NSInteger inputState;<br>@end</p>
+<p>#import “LYFPasswordPointLayer.h”<br>#import &lt;UIKit/UIKit.h&gt;<br>#import “Header.h”<br>@implementation LYFPasswordPointLayer</p>
+<ul>
+<li><p>(void)drawInContext:(CGContextRef)ctx<br>{<br>  //self.backgroundColor = [UIColor cyanColor].CGColor;<br>  CGRect pointFrame = self.bounds;</p>
+<p>  UIBezierPath <em>pointPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(pointFrame.size.width/6, pointFrame.size.width/6, pointFrame.size.width</em>2/3, pointFrame.size.height*2/3) cornerRadius:pointFrame.size.height / 3.0];</p>
+<p>  if (self.inputState == 1){</p>
+<pre><code>  CGContextSetStrokeColorWithColor(ctx, kOutCircularHighlightColor.CGColor);
+  CGContextSetLineWidth(ctx, pointFrame.size.height/3.0);
+  CGContextAddPath(ctx, pointPath.CGPath);
+  CGContextDrawPath(ctx, kCGPathFillStroke);
+  CGContextSetFillColorWithColor(ctx, kCircularHighlightColor.CGColor);
+  CGContextAddPath(ctx, pointPath.CGPath);
+  CGContextDrawPath(ctx, kCGPathFillStroke);</code></pre>
+<p>  }else if (self.inputState == 2){</p>
+<pre><code>  CGContextSetStrokeColorWithColor(ctx, kOutLineErrorColor.CGColor);
+  CGContextSetLineWidth(ctx, pointFrame.size.height/3.0);
+  CGContextAddPath(ctx, pointPath.CGPath);
+  CGContextDrawPath(ctx, kCGPathFillStroke);
+  CGContextSetFillColorWithColor(ctx, kCircularErrorColor.CGColor);
+  CGContextAddPath(ctx, pointPath.CGPath);
+  CGContextDrawPath(ctx, kCGPathFillStroke);</code></pre>
+<p>  }else{</p>
+<pre><code>  CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+  CGContextSetLineWidth(ctx, pointFrame.size.height/3.0);
+  CGContextAddPath(ctx, pointPath.CGPath);
+  CGContextDrawPath(ctx, kCGPathFillStroke);
+  CGContextSetFillColorWithColor(ctx, kCircularColor.CGColor);
+  CGContextAddPath(ctx, pointPath.CGPath);
+  CGContextDrawPath(ctx, kCGPathFillStroke);</code></pre>
+<p>  }<br>}<br>@end</p>
+</li>
+</ul>
+<p>#import &lt;UIKit/UIKit.h&gt;<br>#import “LYFPasswordLineLayer.h”<br>@protocol PasswordViewDelegate;<br>@interface LYFPasswordView : UIView<br>@property (nonatomic,weak) id<PasswordViewDelegate> delegate;<br>//@property (nonatomic,assign) PasswordState passwordState;<br>@end</p>
+<p>@protocol PasswordViewDelegate <NSObject><br>#pragma mark - 输入完回掉</p>
+<ul>
+<li>(void)setPasswordView:(LYFPasswordView <em>)passwordView withPassword:(NSString</em>)password;<br>@end</li>
+</ul>
+<p>#import “LYFPasswordView.h”<br>#import “LYFPasswordPointLayer.h”<br>#import “Header.h”<br>@interface LYFPasswordView ()<br>@property (nonatomic,strong) NSMutableArray *pointLayerArrM;//点的<br>@property (nonatomic,strong) NSMutableArray *pointIDArrM;//当前已输的密码<br>@property (nonatomic,strong) LYFPasswordLineLayer *lineLayer;//线条图层<br>@property (nonatomic) CGPoint nowTouchPoint;//当前手指所在的位置<br>@end</p>
+<p>@implementation LYFPasswordView</p>
+<ul>
+<li><p>(id)initWithFrame:(CGRect)frame<br>{<br>  self = [super initWithFrame:frame];<br>  if (self) {</p>
+<pre><code>  //self.backgroundColor=[UIColor lightGrayColor];
+  _pointLayerArrM = [[NSMutableArray alloc]init];
+  _pointIDArrM = [[NSMutableArray alloc]init];
+  [self createPasswordPointLayer];//创建点
+  [self createPasswordLineLayer];//创建线</code></pre>
+<p>  }<br>  return self;<br>}</p>
+</li>
+<li><p>(void)createPasswordPointLayer<br>{<br>  LYFPasswordPointLayer *pointLayer;<br>  for (NSInteger i=0; i&lt;9; i++) {</p>
+<pre><code>  pointLayer = [LYFPasswordPointLayer layer];
+  pointLayer.frame = CGRectMake(kEdgeMargin + i%3 * (kCircularRadius * 2 + kMidMargin), kEdgeMargin + i/3 * (kCircularRadius * 2 + kMidMargin), kCircularRadius*2, kCircularRadius*2);
+  [self.layer addSublayer:pointLayer];
+  [pointLayer setNeedsDisplay];
+  [_pointLayerArrM addObject:pointLayer];</code></pre>
+<p>  }<br>}</p>
+</li>
+<li><p>(void)createPasswordLineLayer<br>{<br>  _lineLayer = [LYFPasswordLineLayer layer];<br>  _lineLayer.frame = self.bounds;<br>  [self.layer addSublayer:_lineLayer];<br>  [_lineLayer setNeedsDisplay];<br>}</p>
+</li>
+<li><p>(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event<br>{<br>  [super touchesBegan:touches withEvent:event];<br>  UITouch *touch = [touches anyObject];<br>  _nowTouchPoint = [touch locationInView:self];</p>
+<p>  LYFPasswordPointLayer *pointLayer;<br>  for (NSInteger i = 0; i &lt; 9; i++){</p>
+<pre><code>  pointLayer = [_pointLayerArrM objectAtIndex:i];
+  if ([self containPoint:_nowTouchPoint inCircle:pointLayer.frame])&#123;
+      pointLayer.inputState = 1;
+      [pointLayer setNeedsDisplay];
+      [_pointIDArrM addObject:[NSNumber numberWithInteger:i]];
+      break;
+  &#125;</code></pre>
+<p>  }<br>}</p>
+</li>
+<li><p>(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event<br>{<br>  [super touchesMoved:touches withEvent:event];<br>  UITouch *touch = [touches anyObject];<br>  _nowTouchPoint = [touch locationInView:self];</p>
+<p>  //NSLog(@”self.nowTouchPoint ======== %f =========”,self.nowTouchPoint.x);<br>  LYFPasswordPointLayer *pointLayer;<br>  for (NSInteger i = 0; i &lt; 9; i++) {</p>
+<pre><code>  pointLayer = [_pointLayerArrM objectAtIndex:i];
+  if ([self containPoint:_nowTouchPoint inCircle:pointLayer.frame]) &#123;//判断点是否在圆内
+      if (![self hasVistedPoint:i]) &#123;//判断点是否已被使用
+          pointLayer.inputState = 1;
+          [pointLayer setNeedsDisplay];
+          [_pointIDArrM addObject:[NSNumber numberWithInteger:i]];
+          break;
+      &#125;
+  &#125;</code></pre>
+<p>  }<br>  _lineLayer.pointIDs = _pointIDArrM;<br>  _lineLayer.nowPoint = _nowTouchPoint;<br>  _lineLayer.inputState = 1;<br>  [_lineLayer setNeedsDisplay];<br>}</p>
+</li>
+<li><p>(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event<br>{<br>  [super touchesEnded:touches withEvent:event];<br>  //获取密码<br>  NSString *password = [self getPassword:_pointIDArrM];<br>  //密码输入完毕回调<br>  if (password.length &gt;= kPasswordMinLength) {</p>
+<pre><code>  [_delegate setPasswordView:self withPassword:password];</code></pre>
+<p>  }else{</p>
+<pre><code>  LYFPasswordPointLayer *pointLayer1;
+  for (int i = 0; i &lt; 9; i++) &#123;
+      pointLayer1 = [_pointLayerArrM objectAtIndex:i];
+      if (pointLayer1.inputState == 1) &#123;
+          pointLayer1.inputState = 2;
+          [pointLayer1 setNeedsDisplay];
+      &#125;
+  &#125;
+  _lineLayer.pointIDs = _pointIDArrM;
+  _lineLayer.nowPoint = _nowTouchPoint;
+  _lineLayer.inputState = 2;
+  [_lineLayer setNeedsDisplay];
+  [self performSelector:@selector(delayAction) withObject:self afterDelay:1];</code></pre>
+<p>  }</p>
+<p>  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];<br>//    [userDefaults setObject:@”0125” forKey:@”password”];<br>  if ([password isEqualToString:[userDefaults objectForKey:@”password”]]) {</p>
+<pre><code>  [self delayAction];</code></pre>
+<p>  }else{</p>
+<pre><code>  NSInteger passwordNumber = [[userDefaults objectForKey:@&quot;passwordNumber&quot;] integerValue];
+  passwordNumber ++;
+  [userDefaults setInteger:passwordNumber forKey:@&quot;passwordNumber&quot;];
+  NSLog(@&quot;passwordNumber == %ld&quot;,passwordNumber);
+  if (passwordNumber &lt;= 5) &#123;
+      LYFPasswordPointLayer *pointLayer1;
+      for (int i = 0; i &lt; 9; i++) &#123;
+          pointLayer1 = [_pointLayerArrM objectAtIndex:i];
+          if (pointLayer1.inputState == 1) &#123;
+              pointLayer1.inputState = 2;
+              [pointLayer1 setNeedsDisplay];
+          &#125;
+      &#125;
+      _lineLayer.pointIDs = _pointIDArrM;
+      _lineLayer.nowPoint = _nowTouchPoint;
+      _lineLayer.inputState = 2;
+      [_lineLayer setNeedsDisplay];
+      [self performSelector:@selector(delayAction) withObject:self afterDelay:1];
+  &#125;else&#123;
+      [self performSelector:@selector(delayAction) withObject:self afterDelay:1];
+  &#125;</code></pre>
+<p>  }<br>}</p>
+</li>
+<li><p>(void)delayAction<br>{<br>   //清除以前的数据<br>   LYFPasswordPointLayer *pointLayer;<br>   for (int i = 0; i &lt; 9; i++) {</p>
+<pre><code>   pointLayer = [_pointLayerArrM objectAtIndex:i];
+   if (pointLayer.inputState != 3) &#123;
+       pointLayer.inputState = 3;
+       [pointLayer setNeedsDisplay];
+   &#125;</code></pre>
+<p>   }<br>   [_pointIDArrM removeAllObjects];<br>   [self.lineLayer setNeedsDisplay];</p>
+</li>
+</ul>
+<p>}<br>#pragma mark – 判断点击点的坐标是否在原点内 –</p>
+<ul>
+<li>(BOOL)containPoint:(CGPoint)point inCircle:(CGRect)rect<br>{<br>  CGPoint center = CGPointMake(rect.origin.x+rect.size.width/2, rect.origin.y+rect.size.height/2);<br>  BOOL isContain = ((center.x-point.x)<em>(center.x-point.x)+(center.y-point.y)</em>(center.y-point.y)-kCircularRadius*kCircularRadius)&lt;0;<br>  return isContain;<br>}<br>#pragma mark – 判断点是否已经被点击使用 –</li>
+<li>(BOOL)hasVistedPoint:(NSInteger)pointId<br>{<br>  BOOL hasVisit = NO;<br>  for (NSNumber *number in _pointIDArrM){<pre><code>  if ([number intValue] == pointId)&#123;
+      hasVisit = YES;
+      break;
+  &#125;</code></pre>
+  }<br>  return hasVisit;<br>}<br>#pragma mark – 获取密码 –</li>
+<li>(NSString *)getPassword:(NSArray *)array<br>{<br>  NSMutableString *password = [[NSMutableString alloc] initWithCapacity:9];<br>  for (NSInteger i = 0; i &lt; [array count]; i++){<pre><code>  NSNumber *number = [array objectAtIndex:i];
+  [password appendFormat:@&quot;%d&quot;,[number intValue]];</code></pre>
+  }<br>  return password;<br>}<br>@end</li>
+</ul>
+<p>#import &lt;UIKit/UIKit.h&gt;<br>#import “LYFPasswordLineLayer.h”<br>@protocol SetPasswordViewDelegate;<br>@interface LYFSetPasswordView : UIView<br>@property (nonatomic,weak) id<SetPasswordViewDelegate> delegate;<br>//@property (nonatomic,assign) PasswordState passwordState;<br>@end</p>
+<p>@protocol SetPasswordViewDelegate <NSObject><br>#pragma mark - 输入完回掉</p>
+<ul>
+<li>(void)newSetPasswordView:(LYFSetPasswordView *)passwordView withPassword:(NSArray *)password;<br>@end</li>
+</ul>
+<p>#import “LYFSetPasswordView.h”<br>#import “LYFPasswordPointLayer.h”<br>#import “Header.h”<br>@interface LYFSetPasswordView ()<br>@property (nonatomic,strong) NSMutableArray *pointLayerArrM;//点的<br>@property (nonatomic,strong) NSMutableArray *pointIDArrM;//当前已输的密码<br>@property (nonatomic,strong) LYFPasswordLineLayer *lineLayer;//线条图层<br>@property (nonatomic) CGPoint nowTouchPoint;//当前手指所在的位置<br>@end<br>@implementation LYFSetPasswordView</p>
+<ul>
+<li><p>(id)initWithFrame:(CGRect)frame<br>{<br>  self = [super initWithFrame:frame];<br>  if (self) {</p>
+<pre><code>  //self.backgroundColor=[UIColor lightGrayColor];
+  _pointLayerArrM = [[NSMutableArray alloc]init];
+  _pointIDArrM = [[NSMutableArray alloc]init];
+  [self createPasswordPointLayer];//创建点
+  [self createPasswordLineLayer];//创建线</code></pre>
+<p>  }<br>  return self;<br>}</p>
+</li>
+<li><p>(void)createPasswordPointLayer<br>{<br>  LYFPasswordPointLayer *pointLayer;<br>  for (NSInteger i=0; i&lt;9; i++) {</p>
+<pre><code>  pointLayer = [LYFPasswordPointLayer layer];
+  pointLayer.frame = CGRectMake(kEdgeMargin + i%3 * (kCircularRadius * 2 + kMidMargin), kEdgeMargin + i/3 * (kCircularRadius * 2 + kMidMargin), kCircularRadius*2, kCircularRadius*2);
+  [self.layer addSublayer:pointLayer];
+  [pointLayer setNeedsDisplay];
+  [_pointLayerArrM addObject:pointLayer];</code></pre>
+<p>  }<br>}</p>
+</li>
+<li><p>(void)createPasswordLineLayer<br>{<br>  _lineLayer = [LYFPasswordLineLayer layer];<br>  _lineLayer.frame = self.bounds;<br>  [self.layer addSublayer:_lineLayer];<br>  [_lineLayer setNeedsDisplay];<br>}</p>
+</li>
+<li><p>(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event<br>{<br>  [super touchesBegan:touches withEvent:event];<br>  UITouch *touch = [touches anyObject];<br>  _nowTouchPoint = [touch locationInView:self];</p>
+<p>  LYFPasswordPointLayer *pointLayer;<br>  for (NSInteger i = 0; i &lt; 9; i++){</p>
+<pre><code>  pointLayer = [_pointLayerArrM objectAtIndex:i];
+  if ([self containPoint:_nowTouchPoint inCircle:pointLayer.frame])&#123;
+      pointLayer.inputState = 1;
+      [pointLayer setNeedsDisplay];
+      [_pointIDArrM addObject:[NSNumber numberWithInteger:i]];
+      break;
+  &#125;</code></pre>
+<p>  }<br>}</p>
+</li>
+<li><p>(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event<br>{<br>  [super touchesMoved:touches withEvent:event];<br>  UITouch *touch = [touches anyObject];<br>  _nowTouchPoint = [touch locationInView:self];</p>
+<p>  //NSLog(@”self.nowTouchPoint ======== %f =========”,self.nowTouchPoint.x);<br>  LYFPasswordPointLayer *pointLayer;<br>  for (NSInteger i = 0; i &lt; 9; i++) {</p>
+<pre><code>  pointLayer = [_pointLayerArrM objectAtIndex:i];
+  if ([self containPoint:_nowTouchPoint inCircle:pointLayer.frame]) &#123;//判断点是否在圆内
+      if (![self hasVistedPoint:i]) &#123;//判断点是否已被使用
+          pointLayer.inputState = 1;
+          [pointLayer setNeedsDisplay];
+          [_pointIDArrM addObject:[NSNumber numberWithInteger:i]];
+          break;
+      &#125;
+  &#125;</code></pre>
+<p>  }<br>  _lineLayer.pointIDs = _pointIDArrM;<br>  _lineLayer.nowPoint = _nowTouchPoint;<br>  _lineLayer.inputState = 1;<br>  [_lineLayer setNeedsDisplay];<br>}</p>
+</li>
+<li><p>(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event<br>{<br>  [super touchesEnded:touches withEvent:event];<br>  //密码输入完毕回调<br>  if (_pointIDArrM.count &gt;= kPasswordMinLength) {</p>
+<pre><code>  [_delegate newSetPasswordView:self withPassword:_pointIDArrM];</code></pre>
+<p>  }<br>  [self delayAction];<br>}</p>
+</li>
+<li><p>(void)delayAction<br>{<br>   //清除以前的数据<br>   LYFPasswordPointLayer *pointLayer;<br>   for (int i = 0; i &lt; 9; i++) {</p>
+<pre><code>   pointLayer = [_pointLayerArrM objectAtIndex:i];
+   if (pointLayer.inputState != 3) &#123;
+       pointLayer.inputState = 3;
+       [pointLayer setNeedsDisplay];
+   &#125;</code></pre>
+<p>   }<br>   [_pointIDArrM removeAllObjects];<br>   [self.lineLayer setNeedsDisplay];<br>}<br>#pragma mark – 判断点击点的坐标是否在原点内 –</p>
+</li>
+<li><p>(BOOL)containPoint:(CGPoint)point inCircle:(CGRect)rect<br>{<br>  CGPoint center = CGPointMake(rect.origin.x+rect.size.width/2, rect.origin.y+rect.size.height/2);<br>  BOOL isContain = ((center.x-point.x)<em>(center.x-point.x)+(center.y-point.y)</em>(center.y-point.y)-kCircularRadius*kCircularRadius)&lt;0;<br>  return isContain;<br>}<br>#pragma mark – 判断点是否已经被点击使用 –</p>
+</li>
+<li><p>(BOOL)hasVistedPoint:(NSInteger)pointId<br>{<br>  BOOL hasVisit = NO;<br>  for (NSNumber *number in _pointIDArrM){</p>
+<pre><code>  if ([number intValue] == pointId)&#123;
+      hasVisit = YES;
+      break;
+  &#125;</code></pre>
+<p>  }<br>  return hasVisit;<br>}<br>#pragma mark – 获取密码 –</p>
+</li>
+<li><p>(NSString *)getPassword:(NSArray *)array<br>{<br>  NSMutableString *password = [[NSMutableString alloc] initWithCapacity:9];<br>  for (NSInteger i = 0; i &lt; [array count]; i++){</p>
+<pre><code>  NSNumber *number = [array objectAtIndex:i];
+  [password appendFormat:@&quot;%d&quot;,[number intValue]];</code></pre>
+<p>  }<br>  return password;<br>}<br>@end</p>
+</li>
+</ul> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

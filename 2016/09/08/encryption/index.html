@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="MD5 AES RSA 和数据加密传输"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>MD5 AES RSA 和数据加密传输 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">MD5 AES RSA 和数据加密传输</div>
+  <div id="post_time">2016-09-08</div>
+
+  <div id="post_content"> <p>网络传输数据时会面临数据被 窃听、篡改、仿冒。这三种攻击方式，分别会破坏消息的私密性、完整性和通信双方的互信。</p>
+<p>一 单向加密 哈希HASH散列 严格意义上不算一种加密算法<br>MD5(Message Digest algorithm 5):消息摘要算法<br>SHA(Secure Hash Algorithm):安全散列算法<br>HMAC(Hash Message Authentication Code):散列消息鉴别码 给定一个密钥，对明文进行密钥拼接,并且做”两次散列”，得到32位结果。<br>CRC(Cyclical Redundancy Check):循环冗余码校验</p>
+<p>MD5加密的特点：<br>MD5Hash算法的特点：<br>1：输入任意长度的信息，经过摘要处理，输出为32位字符（128位）的信息.（数字指纹）<br>2：不同输入产生不同的结果，（唯一性）<br>3：根据128位的输出结果不可能反推出输入的信息(不可逆)</p>
+<p>不可逆运算<br>对不同的数据加密的结果是定长的32位字符（不管文件多大都一样）<br>对相同的数据加密，得到的结果是一样的（也就是复制）。<br>抗修改性 : 信息“指纹”，对原数据进行任何改动,哪怕只修改一个字节,所得到的 MD5 值都有很大区别.<br>弱抗碰撞 : 已知原数据和其 MD5 值,想找到一个具有相同 MD5 值的数据(即伪造数据)是非常困难的.<br>强抗碰撞: 想找到两个不同数据,使他们具有相同的 MD5 值,是非常困难的</p>
+<p>MD5 应用:<br>一致性验证：MD5将整个文件当做一个大文本信息，通过不可逆的字符串变换算法，产生一个唯一的MD5信息摘要，就像每个人都有自己独一无二的指纹,MD5对任何文件产生一个独一无二的数字指纹。</p>
+<p>SHA<br>安全哈希算法（Secure Hash Algorithm）主要适用于数字签名标准（Digital Signature Standard DSS）里面定义的数字签名算法（Digital Signature Algorithm DSA）。对于长度小于2^64位的消息，SHA1会产生一个160位的消息摘要。当接收到消息的时候，这个消息摘要可以用来验证数据的完整性。在传输的过程中，数据很可能会发生变化，那么这时候就会产生不同的消息摘要。当让除了SHA1还有SHA256以及SHA512等。</p>
+<p>SHA1有如下特性：不可以从消息摘要中复原信息；两个不同的消息不会产生同样的消息摘要。</p>
+<p>MD5和SHA的比较<br>因为二者均由 MD4 导出，SHA-1 和 MD5 彼此很相似。相应的，他们的强度和其他特性也是相似，但还有以下几点不同：</p>
+<p>对强行攻击的安全性<br>最显著和最重要的区别是 SHA-1 摘要比 MD5 摘要长 32 位。使用强行技术，产生任何一个报文使其摘要等于给定报摘要的难度对 MD5 是 2^128 数量级的操作，而对 SHA-1 则是 2^160 数量级的操作。这样，SHA-1 对强行攻击有更大的强度。</p>
+<p>对密码分析的安全性<br>由于 MD5 的设计，易受密码分析的攻击，SHA-1 显得不易受这样的攻击。</p>
+<p>速度<br>在相同的硬件上，SHA-1 的运行速度比 MD5 慢。</p>
+<p>二、对称加密<br>优点：<br>算法公开，计算量小，加密速度快，加密效率高<br>缺点：<br>双方使用相同的钥匙，交换密钥时安全性得不到保证</p>
+<p>DES(Data Encryption Standard)：数据加密标准(现在用的比较少，因为它的加密强度不够，能够暴力破解)<br>3DES：原理和DES几乎是一样的，只是使用3个密钥，对相同的数据执行三次加密，增强加密强度。(缺点：要维护3个密钥，大大增加了维护成本)<br>AES(Advanced Encryption Standard)：高级加密标准，目前美国国家安全局使用的，苹果的钥匙串访问采用的就AES加密。是现在公认的最安全的加密方式，是对称密钥加密中最流行的算法。可以使用128、192 和 256 位密钥，<br>AES属于块加密（Block Cipher），块加密中有CBC、ECB、CTR、OFB、CFB等几种工作模式。常用的为CBC和ECB模式，<br>ECB模式<br>这种模式是将整个明文分成若干段相同的小段，然后对每一小段进行加密。<br>CBC模式<br>这种模式是先将明文切分成若干小段，然后每一小段与初始块或者上一段的密文段进行异或运算后，再与密钥进行加密。<br>需要注意的是CBC模式需要传一个16位的向量值，不传的话，默认为空，空的话就属于ECB模式。</p>
+<p>三、非对称加密<br>RSA(设计者的名字命名-Ron Rivest, AdiShamir、Leonard Adleman)<br>DSA(Digital Signature Algorithm):数字签名<br>ECC 椭圆曲线密码术</p>
+<p>为了保证传输的公钥安全，通常需要 CA(Certification Authority) 证书认证使通信双方能够互信</p>
+<p>简介：</p>
+<p>对称加密算法又称现代加密算法。<br>非对称加密是计算机通信安全的基石，保证了加密数据不会被破解。<br>非对称加密算法需要两个密钥：公开密钥(publickey) 和私有密(privatekey) 1024位、2048位或者更长<br>公开密钥和私有密钥是一对<br>如果用公开密钥对数据进行加密，只有用对应的私有密钥才能解密。<br>如果用私有密钥对数据进行加密，只有用对应的公开密钥才能解密。</p>
+<p>特点：<br>算法强度复杂，安全性依赖于算法与密钥。<br>加密解密速度慢。</p>
+<p>与对称加密算法的对比：<br>对称加密只有一种密钥，并且是非公开的，如果要解密就得让对方知道密钥。<br>非对称加密有两种密钥，其中一个是公开的。</p>
+<p>RSA应用场景：<br>由于RSA算法的加密解密速度要比对称算法速度慢很多，在实际应用中，通常采取<br>数据本身的加密和解密使用对称加密算法(AES)。<br>用RSA算法加密并传输对称算法所需的密钥。</p>
+<p>总结<br>1 在数据传输过程中通常需要用 RSA 来建立互信链接,接收方把生成的公钥(Public key)发送给发送方,发送方把密钥(d)和数字签名的密钥(m)通过公钥(Public key)加密后发送给接收方，接收方通过私钥(Private key) 解密获取密钥(d)和数字签名的密钥(m)</p>
+<p>2 发送方用 AES 加密，通过密钥(d)对明文进行加密，得到密文(CT)，同时用数字签名的密钥(m)对明文进行数字签名，得到32位的信息摘要(IS),然后把密文(CT)和信息摘要(IS)发送给接收方。</p>
+<p>3 接受方收到密文(CT)和信息摘要(IS)后，用密钥(d)对密文进行解密得到明文，然后用数字签名的密钥(m)对明文从新签名，把得到的结果与信息摘要(IS)进行比对，如果一致则数据完整可信，否则数据被不可信，从新链接</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

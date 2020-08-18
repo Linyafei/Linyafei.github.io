@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="Flutter 回调"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>Flutter 回调 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">Flutter 回调</div>
+  <div id="post_time">2020-03-08</div>
+
+  <div id="post_content"> <p>  import ‘package:flutter/material.dart’;</p>
+<p>  class MyCallback extends StatefulWidget {<br>    @override<br>    _MyCallbackState createState() =&gt; _MyCallbackState();<br>  }</p>
+<p>  class _MyCallbackState extends State<MyCallback> {<br>    var _myMsg;<br>    @override<br>    Widget build(BuildContext context) {<br>      return Scaffold(<br>        appBar: AppBar(title: Text(“MyCallback”)),<br>        body: Center(<br>          child:Column(<br>            children: <Widget>[<br>              RaisedButton(<br>                child: Text(‘MyCallback’),<br>                onPressed: () {<br>                  Navigator.push(context,<br>                      MaterialPageRoute(builder: (BuildContext context) {<br>                        return MyNewCallback(<br>                          param: ‘Hello’,<br>                          callBack: (String msg) {<br>                            print(msg);<br>                            setState(() {<br>                              _myMsg = msg;<br>                            });<br>                          });<br>                      }));<br>                },<br>              ),<br>              Text(“$_myMsg”),<br>            ],<br>          ),<br>        ),<br>      );<br>    }<br>  }</p>
+<p>  class MyNewCallback extends StatelessWidget {<br>    final String param; // home过来的参数<br>    final Function callBack; // 回调方法<br>    MyNewCallback({Key key, this.param, this.callBack}) : super(key: key);</p>
+<pre><code>_printParam() &#123;
+  print(this.param);
+&#125;
+
+@override
+Widget build(BuildContext context) &#123;
+  _printParam();
+  return Scaffold(
+    appBar: AppBar(title: Text(&#39;MyNewCallback&#39;)),
+    body: Center(
+      child: Column(
+        children: &lt;Widget&gt;[
+          RaisedButton(
+            onPressed: () &#123;
+              this.callBack(&#39;World&#39;);
+              Navigator.of(context).pop();
+            &#125;,
+            child: Text(&#39;返回&#39;),
+          ),
+          Text(&quot;$param&quot;),
+        ],
+      ),
+    )
+  );
+&#125;</code></pre>
+<p>  }</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

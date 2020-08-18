@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS 微信分享功能"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS 微信分享功能 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS 微信分享功能</div>
+  <div id="post_time">2017-03-23</div>
+
+  <div id="post_content"> <p> #import “AppDelegate.h”<br> @interface AppDelegate ()<br> @end<br> @implementation AppDelegate</p>
+<ul>
+<li>(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {<br>  // Override point for customization after application launch.<br>  // wxda4611bec8saw 在腾讯注册微信分享的APPId<br>  [WXApi registerApp:@”wxda4611bec8saw”];<br>  //com.lyf.WeChatDemo<br>  return YES;<br>}</li>
+<li>(BOOL)application:(UIApplication *)app openURL:(NSURL <em>)url options:(NSDictionary</em>)options<br>{<br>  [WXApi handleOpenURL:url delegate:self]; //向微信注册app的url<br>  return YES;<br>}<br>#pragma mark - WXDelegate 微信分享／登录/支付方法回调</li>
+<li>(void)onResp:(BaseResp *)resp {<br>  // 1.分享后回调类<br>  if ([resp isKindOfClass:[SendMessageToWXResp class]]) {<pre><code>  if (resp.errCode == 0) &#123;
+      //SendMessageToWXResp *resp1 = (SendMessageToWXResp *)resp;
+      [[NSNotificationCenter defaultCenter] postNotificationName:@&quot;shareRedSuccessNotification&quot; object:nil];
+  &#125;else&#123;</code></pre>
+//<pre><code>  &#125;</code></pre>
+  }<br>  //    WXSuccess           = 0,    /<strong>&lt; 成功    */<br>  //    WXErrCodeCommon     = -1,   /**&lt; 普通错误类型    */<br>  //    WXErrCodeUserCancel = -2,   /</strong>&lt; 用户点击取消并返回    <em>/<br>  //    WXErrCodeSentFail   = -3,   /**&lt; 发送失败    <em>/<br>  //    WXErrCodeAuthDeny   = -4,   /</em></em>&lt; 授权失败    */<br>  //    WXErrCodeUnsupport  = -5,   /**&lt; 微信不支持    */<br>  //    // 2.微信登录向微信请求授权回调类<br>  //    if ([resp isKindOfClass:[SendAuthResp class]]) {<br>  //        if (resp.errCode == 0) {<br>  //            //成功<br>  //            if ([_wxDelegate respondsToSelector:@selector(loginSuccessByCode:)]) {<br>  //                SendAuthResp * resp2 = (SendAuthResp *)resp;<br>  //                [_wxDelegate loginSuccessByCode:resp2.code];<br>  //            }<br>  //        }else [Common showError:@”授权失败” view:KEYWINDOW];<br>  //    }<br>  //    // 3.支付后回调类<br>  //    if ([resp isKindOfClass:[PayResp class]]) {<br>  //        //对支付结果进行回调<br>  //        //PayResp *resp3 = (PayResp *)resp;<br>  //    }<br>}</li>
+</ul>
+<p>#import &lt;UIKit/UIKit.h&gt;<br>@interface ViewController : UIViewController<br>@end</p>
+<p>#import “ViewController.h”<br>#import “WXApi.h”<br>@interface ViewController ()<br>@end<br>@implementation ViewController</p>
+<ul>
+<li><p>(void)viewDidLoad {<br>  [super viewDidLoad];<br>  // Do any additional setup after loading the view, typically from a nib.</p>
+<p>  self.view.backgroundColor = [UIColor whiteColor];<br>  NSArray *arr = @[@”文字类型”,@”图片类型”,@”音乐类型”,@”视频类型”,@”网页类型”];<br>  for (NSInteger i=0; i&lt;5; i++) {</p>
+<pre><code>  UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+  btn.frame = CGRectMake(60, 100 + 50 * i, 100, 40);
+  btn.backgroundColor = [UIColor darkGrayColor];
+  [btn setTitle:arr[i] forState:UIControlStateNormal];
+  [btn addTarget:self action:@selector(shareClickEvent:) forControlEvents:UIControlEventTouchUpInside];
+  btn.tag = i + 1;
+  [self.view addSubview:btn];</code></pre>
+<p>  }<br>}</p>
+</li>
+<li><p>(void)shareClickEvent:(UIButton *)btn<br>{<br>//    发送到聊天界面——WXSceneSession<br>//    发送到朋友圈——WXSceneTimeline<br>//    添加到微信收藏——WXSceneFavorite<br>  if (btn.tag == 1) {//文字类型分享示例</p>
+<pre><code>  SendMessageToWXReq *req = [[SendMessageToWXReq alloc]init];
+  req.text = @&quot;测试微信分享&quot;;
+  req.bText = YES;
+  req.scene = WXSceneSession;
+  [WXApi sendReq:req];</code></pre>
+<p>  }else if (btn.tag == 1){//图片类型分享示例</p>
+<pre><code>  WXMediaMessage *message = [[WXMediaMessage message]init];
+  [message setThumbImage:[UIImage imageNamed:@&quot;lyf.png&quot;]];
+  //缩略图
+  WXImageObject *imageObject = [WXImageObject object];
+  NSString *filePath = [[NSBundle mainBundle] pathForResource:@&quot;resl&quot; ofType:@&quot;jpg&quot;];//图片路径
+  imageObject.imageData = [NSData dataWithContentsOfFile:filePath];
+  message.mediaObject = imageObject;
+  SendMessageToWXReq *req = [[SendMessageToWXReq alloc]init];
+  req.bText = YES;
+  req.message = message;
+  req.scene = WXSceneSession;
+  [WXApi sendReq:req];</code></pre>
+<p>  }else if (btn.tag == 2){//音乐类型分享示例</p>
+<pre><code>  WXMediaMessage *message = [WXMediaMessage message];
+  message.title = @&quot;音乐标题&quot;;
+  message.description = @&quot;音乐描述&quot;;
+  [message setThumbImage:[UIImage imageNamed:@&quot;lyf.jpg&quot;]];
+  //
+  WXMusicObject *ext = [WXMusicObject object];
+  ext.musicUrl = @&quot;音乐url&quot;;
+  ext.musicLowBandUrl = ext.musicUrl;
+  ext.musicDataUrl = @&quot;音乐数据url&quot;;
+  ext.musicLowBandDataUrl = ext.musicDataUrl;
+  message.mediaObject = ext;
+  //
+  SendMessageToWXReq *req = [[SendMessageToWXReq alloc]init];
+  req.bText = NO;
+  req.message = message;
+  req.scene = WXSceneSession;
+  [WXApi sendReq:req];</code></pre>
+<p>  }else if (btn.tag == 3){//视频类型分享示例</p>
+<pre><code>  WXMediaMessage *message = [WXMediaMessage message];
+  message.title = @&quot;标题&quot;;
+  message.description = @&quot;描述&quot;;
+  [message setThumbImage:[UIImage imageNamed:@&quot;lyf.jpg&quot;]];
+  //
+  WXVideoObject *videoObject = [WXVideoObject object];
+  videoObject.videoUrl = @&quot;视频url&quot;;
+  videoObject.videoLowBandUrl = videoObject.videoUrl;//低分辨率的视频
+  //
+  SendMessageToWXReq *req = [[SendMessageToWXReq alloc]init];
+  req.bText = NO;
+  req.message = message;
+  req.scene = WXSceneSession;
+  [WXApi sendReq:req];</code></pre>
+<p>  }else{//网页类型分享示例</p>
+<pre><code>  WXMediaMessage *message = [WXMediaMessage message];
+  message.title = @&quot;标题&quot;;
+  message.description = @&quot;描述&quot;;
+  [message setThumbImage:[UIImage imageNamed:@&quot;share_icon&quot;]];
+  //
+  WXWebpageObject *webpageObject = [WXWebpageObject object];
+  webpageObject.webpageUrl = @&quot;https://open.weixin.qq.com&quot;;
+  message.mediaObject = webpageObject;
+  //
+  SendMessageToWXReq *req = [[SendMessageToWXReq alloc]init];
+  req.bText = NO;
+  req.message = message;
+  req.scene = WXSceneTimeline;
+  [WXApi sendReq:req];</code></pre>
+<p>  }<br>}<br>@end</p>
+</li>
+</ul> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

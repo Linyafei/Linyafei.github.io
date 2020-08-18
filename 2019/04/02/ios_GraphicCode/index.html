@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS 生成图形验证码"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS 生成图形验证码 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS 生成图形验证码</div>
+  <div id="post_time">2019-04-02</div>
+
+  <div id="post_content"> <p> #import &lt;UIKit/UIKit.h&gt;<br> @protocol NumberDelegate <NSObject></p>
+<ul>
+<li>(void)numberChange:(NSString *)str;<br>@end<br>@interface GraphicCodeView : UIView<br>@property(nonatomic,strong) id<NumberDelegate>delegate;</li>
+<li>(void)updateVerifyCode;<br>@end</li>
+</ul>
+<p>#import “GraphicCodeView.h”<br>@interface GraphicCodeView ()<br>@property (nonatomic, retain) NSArray *allStringArray;<br>@property (nonatomic, retain) NSString *verifyCodeStrM;<br>@property (nonatomic, retain) UILabel *codeLabel;<br>@end</p>
+<p>@implementation GraphicCodeView</p>
+<ul>
+<li><p>(id)initWithFrame:(CGRect)frame<br>{<br>  self = [super initWithFrame:frame];<br>  if (self) {</p>
+<pre><code>  self.backgroundColor = [UIColor clearColor];
+  [self getVerifyCode];</code></pre>
+<p>  }<br>  return self;<br>}</p>
+</li>
+<li><p>(void)updateVerifyCode<br>{<br>   [self getVerifyCode];<br>   [self setNeedsDisplay];<br>}</p>
+</li>
+<li><p>(void)getVerifyCode<br>{<br>  _allStringArray = [[NSArray alloc] initWithObjects:@”0”,@”1”,@”2”,@”3”,@”4”,@”5”,@”6”,@”7”,@”8”,@”9”,@”A”,@”B”,@”C”,@”D”,@”E”,@”F”,@”G”,@”H”,@”I”,@”J”,@”K”,@”L”,@”M”,@”N”,@”O”,@”P”,@”Q”,@”R”,@”S”,@”T”,@”U”,@”V”,@”W”,@”X”,@”Y”,@”Z”,@”a”,@”b”,@”c”,@”d”,@”e”,@”f”,@”g”,@”h”,@”i”,@”j”,@”k”,@”l”,@”m”,@”n”,@”o”,@”p”,@”q”,@”r”,@”s”,@”t”,@”u”,@”v”,@”w”,@”x”,@”y”,@”z”,nil];</p>
+<p>  NSString *tempStrM = [[NSString alloc]init];<br>  _verifyCodeStrM = [[NSMutableString alloc]init];<br>  for(NSInteger i = 0; i &lt; 4; i++)<br>  {</p>
+<pre><code>  NSInteger index = arc4random() % ([_allStringArray count] - 1);
+  tempStrM = [_allStringArray objectAtIndex:index];
+  _verifyCodeStrM = [_verifyCodeStrM stringByAppendingString:tempStrM];</code></pre>
+<p>  }<br>  //NSLog(@”self.changeString ==%@”,_verifyCodeStrM);<br>}</p>
+</li>
+<li><p>(void)drawRect:(CGRect)rect<br>{<br>  [super drawRect:rect];</p>
+<p>  //    float red = arc4random() % 100 / 100.0;<br>  //    float green = arc4random() % 100 / 100.0;<br>  //    float blue = arc4random() % 100 / 100.0;<br>  //    UIColor *color = [UIColor colorWithRed:red green:green blue:blue alpha:0.5];</p>
+<p>  [self setBackgroundColor:[UIColor clearColor]];</p>
+<p>  NSString *text = [NSString stringWithFormat:@”%@”,_verifyCodeStrM];<br>  CGSize cSize = [@”S” sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20]}];<br>  //    NSInteger width = rect.size.width / text.length - cSize.width;<br>  //    NSInteger height = rect.size.height - cSize.height;</p>
+<p>  CGPoint point ;//= CGPointMake(0, 0);</p>
+<p>  CGFloat pX, pY;<br>  for (NSInteger i = 0; i &lt; text.length; i++)<br>  {</p>
+<pre><code>  unichar c = [text characterAtIndex:i];
+  NSString *textC = [NSString stringWithFormat:@&quot;%C&quot;, c];
+  //文字位置
+  //        pX = arc4random() % width + (rect.size.width / text.length) * i;
+  //        pY = arc4random() % height;
+  //        point = CGPointMake(pX, pY);
+  pX = (rect.size.width / text.length) * i;
+  pY = (rect.size.height - cSize.height)/2;
+  point = CGPointMake(pX, pY);
+  //字体颜色
+  CGFloat red = arc4random() % 255 / 255.0;
+  CGFloat green = arc4random() % 255 / 255.0;
+  CGFloat blue = arc4random() % 255 / 255.0;
+  UIColor *color = [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+  //Georgia-BoldItalic//HoeflerText-Black//HoeflerText-Regular// HoeflerText-Italic//BodoniSvtyTwoITCTT-Book
+  //倾斜率
+  CGFloat obliqueness = ((int)arc4random() % 9 + 1);//(int)arc4random()%10;
+  [textC drawAtPoint:point withAttributes:@&#123;NSFontAttributeName:[UIFont fontWithName:@&quot;HoeflerText-Regular&quot; size:25],NSForegroundColorAttributeName : color,NSObliquenessAttributeName : @(obliqueness/10)&#125;];</code></pre>
+<p>  }<br>  if (self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(numberChange:)]) {</p>
+<pre><code>  [self.delegate numberChange:text];</code></pre>
+<p>  }<br>}<br>@end</p>
+</li>
+</ul>
+<p>通过如下方法实现</p>
+<ul>
+<li><p>(void)createGraphicCodeView<br>{<br>  _codeView = [[GraphicCodeView alloc]initWithFrame:CGRectMake(40,200,100,60)];<br>  _codeView.delegate = self;<br>  [self.view addSubview:_codeView];<br>  _codeView.backgroundColor = [UIColor grayColor];</p>
+<p>  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateGraphicVerifyCodeTapClick)];<br>  [_codeView addGestureRecognizer:tap];</p>
+</li>
+</ul>
+<p>}</p>
+<ul>
+<li>(void)updateGraphicVerifyCodeTapClick<br>{<br>  [_codeView updateVerifyCode];<br>}</li>
+<li>(void)numberChange:(NSString *)str<br>{<br>  NSLog(@”===%@===”,str);<br>}</li>
+</ul> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

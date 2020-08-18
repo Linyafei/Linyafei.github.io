@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS 试图约束"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS 试图约束 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS 试图约束</div>
+  <div id="post_time">2016-12-03</div>
+
+  <div id="post_content"> <p>通过NSLayoutConstraint  实现约束试图，使试图图在不同尺寸的屏幕上合理流动的显示</p>
+<p> #import &lt;UIKit/UIKit.h&gt;<br> @interface LayoutConstraintVC : UIViewController<br> @end</p>
+<p>#import “LayoutConstraintVC.h”<br>@interface LayoutConstraintVC ()<br>@end<br>@implementation LayoutConstraintVC</p>
+<ul>
+<li>(void)viewDidLoad {<br>  [super viewDidLoad];<br>  // Do any additional setup after loading the view.</li>
+</ul>
+<p>//    [self createLayoutConstraintCode];//代码的方式实现自动布局<br>    [self createLayoutConstraintCode2];//代码的方式实现多视图自动布局<br>//    [self createLayoutConstraintVisual];//用可视化语言方式实现添加约束<br>//    [self createLayoutConstraintVisual2];//用可视化语言方式实现多视图添加约束</p>
+<p>}<br>-(void)createLayoutConstraintCode<br>{<br>    //代码的方式实现自动布局<br>    UIView <em>redView = [[UIView alloc] init];<br>    [self.view addSubview:redView];<br>    redView.backgroundColor = [UIColor redColor];<br>    redView.translatesAutoresizingMaskIntoConstraints = NO;//自动布局是，设置下面的属性<br>    //添加约束之前一定要将视图加到父视图上面<br>    //x、y、width、height<br>    /</em><br>     第一个参数:第一个视图对象(firstItem)<br>     第二个参数:第一个视图对象的某个属性(x)<br>     第三个参数:两个视图之间的关系(==)<br>     第四个参数:第二个视图对象(secondItem)<br>     第五个参数:第二个视图的属性(x)<br>     第六个参数:系数(1)<br>     第七个参数:数值(80)<br>     */<br>    //x<br>    NSLayoutConstraint <em>xCon = [NSLayoutConstraint constraintWithItem:redView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:80];<br>    //y<br>    NSLayoutConstraint *yCon = [NSLayoutConstraint constraintWithItem:redView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1 constant:100];<br>    //width<br>    NSLayoutConstraint *wCon = [NSLayoutConstraint constraintWithItem:redView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:100];<br>    //height<br>    NSLayoutConstraint *hCon = [NSLayoutConstraint constraintWithItem:redView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:80];<br>    //    [self.view addConstraint:xCon];<br>    //    [self.view addConstraint:yCon];<br>    //    [self.view addConstraint:wCon];<br>    //    [self.view addConstraint:hCon];<br>    [self.view addConstraints:@[xCon,yCon,wCon,hCon]];<br>}<br>-(void)createLayoutConstraintCode2<br>{<br>    //代码方式实现约束<br>    UIView *redView = [[UIView alloc] init];<br>    [self.view addSubview:redView];<br>    redView.backgroundColor = [UIColor redColor];<br>    redView.translatesAutoresizingMaskIntoConstraints = NO;<br>    //<br>    UIView *grayView = [[UIView alloc] init];<br>    [self.view addSubview:grayView];<br>    grayView.backgroundColor = [UIColor grayColor];<br>    grayView.translatesAutoresizingMaskIntoConstraints = NO;<br>    //添加约束//红色视图的约束<br>    //x<br>    //redView.x == self.view.x * 1 + 20<br>    NSLayoutConstraint *redXCon = [NSLayoutConstraint constraintWithItem:redView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:20];<br>    //y<br>    //redView.y == self.view.y * 1 + 40<br>    NSLayoutConstraint *redYCon = [NSLayoutConstraint constraintWithItem:redView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1 constant:40];<br>    //bottom<br>    //redView.bottom = self.view.bottom * 1 + (-300)<br>    NSLayoutConstraint *redBottomCon = [NSLayoutConstraint constraintWithItem:redView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:-300];<br>    //灰色视图<br>    //grayView.left == redView.right * 1 + 40<br>    //space<br>    NSLayoutConstraint *spaceCon = [NSLayoutConstraint constraintWithItem:grayView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:redView attribute:NSLayoutAttributeRight multiplier:1 constant:40];<br>    //y<br>    //grayView.top == self.view.top * 1 + 80<br>    NSLayoutConstraint *grayYCon = [NSLayoutConstraint constraintWithItem:grayView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1 constant:80];<br>    //right<br>    //grayView.right == self.view.right * 1 + (-40)<br>    NSLayoutConstraint *grayRightCon = [NSLayoutConstraint constraintWithItem:grayView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1 constant:-40];<br>    //width<br>    NSLayoutConstraint *widthCon = [NSLayoutConstraint constraintWithItem:grayView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:redView attribute:NSLayoutAttributeWidth multiplier:1 constant:0];<br>    //height<br>    NSLayoutConstraint *heightCon = [NSLayoutConstraint constraintWithItem:grayView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:redView attribute:NSLayoutAttributeHeight multiplier:1 constant:0];<br>    //<br>    [self.view addConstraint:redXCon];<br>    [self.view addConstraint:redYCon];<br>    [self.view addConstraint:redBottomCon];<br>    //<br>    [self.view addConstraint:spaceCon];<br>    [self.view addConstraint:grayYCon];<br>    [self.view addConstraint:grayRightCon];<br>    [self.view addConstraint:widthCon];<br>    [self.view addConstraint:heightCon];<br>}<br>-(void)createLayoutConstraintVisual<br>{<br>    //用可视化语言方式添加约束<br>    UIView *redView = [[UIView alloc] init];<br>    [self.view addSubview:redView];<br>    redView.backgroundColor = [UIColor redColor];<br>    redView.translatesAutoresizingMaskIntoConstraints = NO;<br>    //添加约束//每个视图只要在横向和纵向分别添加一个约束组<br>    /</em><br>     第一个参数:可视化语言字符串<br>     第二个参数:一些选项(一般不用)<br>     第三个参数:可视化字符串里面的数值变量的值<br>     第四个参数:可视化语言里面的视图变量值<br>     */<br>    //“H:”表示这个约束是在横向上的,”V:”表示纵向，如果不写，默认是横向<br>    //“|”表示父视图<br>    //[redView]表示显示一个视图<br>    //“-80-“表示左右两个视图的间距是80<br>    //(==100)表示横向宽度是100<br>    //横向<br>    NSArray *horCons = [NSLayoutConstraint constraintsWithVisualFormat:@”H:|-80-[redView(==100)]” options:0 metrics:nil views:NSDictionaryOfVariableBindings(redView)];<br>    [self.view addConstraints:horCons];<br>    //纵向<br>    NSArray *verCons = [NSLayoutConstraint constraintsWithVisualFormat:@”V:|-100-[redView(80)]” options:NSLayoutFormatAlignmentMask metrics:nil views:NSDictionaryOfVariableBindings(redView)];<br>    [self.view addConstraints:verCons];<br>    ////    //这是向可视化字符串传递变化的数值的方式<br>    //    CGFloat offsetY = 200;<br>    //    NSArray *verCons2 = [NSLayoutConstraint constraintsWithVisualFormat:@”V:|-redY-[redView(80)]” options:0 metrics:@{@”redY”:[NSNumber numberWithFloat:offsetY]} views:NSDictionaryOfVariableBindings(redView)];<br>    //    [self.view addConstraints:verCons2];<br>    //    NSArray *verCons3 = [NSLayoutConstraint constraintsWithVisualFormat:@”V:|-20-[_viewRed(height)]” options:NSLayoutFormatAlignmentMask metrics:@{@”height”:@(140)} views:NSDictionaryOfVariableBindings(redView)];<br>    //    [self.view addConstraints:verCons3];<br>}<br>-(void)createLayoutConstraintVisual2<br>{<br>    //可视化语言实现自动布局<br>    UIView *redView = [[UIView alloc] init];<br>    [self.view addSubview:redView];<br>    redView.backgroundColor = [UIColor redColor];<br>    redView.translatesAutoresizingMaskIntoConstraints = NO;<br>    //<br>    UIView *grayView = [[UIView alloc] init];<br>    [self.view addSubview:grayView];<br>    grayView.backgroundColor = [UIColor grayColor];<br>    grayView.translatesAutoresizingMaskIntoConstraints = NO;<br>    //添加约束<br>    //横向约束<br>    NSArray *horCons = [NSLayoutConstraint constraintsWithVisualFormat:@”H:|-20-[redView]-40-[grayView(==redView)]-40-|” options:0 metrics:nil views:NSDictionaryOfVariableBindings(redView,grayView)];<br>    //纵向<br>    //redView<br>    NSArray *redVerCons = [NSLayoutConstraint constraintsWithVisualFormat:@”V:|-40-[redView]-300-|” options:NSLayoutFormatAlignmentMask metrics:nil views:NSDictionaryOfVariableBindings(redView)];<br>    //grayView<br>    NSArray *grayVerCons = [NSLayoutConstraint constraintsWithVisualFormat:@”V:|-80-[grayView(==redView)]” options:0 metrics:nil views:NSDictionaryOfVariableBindings(grayView,redView)];<br>    [self.view addConstraints:horCons];<br>    [self.view addConstraints:redVerCons];<br>    [self.view addConstraints:grayVerCons];<br>}<br>@end</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

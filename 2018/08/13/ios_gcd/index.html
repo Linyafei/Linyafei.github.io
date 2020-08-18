@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS 多线程 GCD"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS 多线程 GCD - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS 多线程 GCD</div>
+  <div id="post_time">2018-08-13</div>
+
+  <div id="post_content"> <p>#import &lt;UIKit/UIKit.h&gt;<br>@interface LYFGCD : UIViewController<br>@end</p>
+<p>#import “LYFGCD.h”<br>@interface LYFGCD ()<br>@end</p>
+<p>@implementation LYFGCD</p>
+<ul>
+<li><p>(void)viewDidLoad {<br>  [super viewDidLoad];<br>  // Do any additional setup after loading the view.<br>/*<br>多线程<br>一、程序、进程、线程<br>程序就是一些指令集合，可以运行的一段代码，是静态的概念。<br>进程是运行起来的程序,需要占空间，进程也是操作系统分配资源的基本单位。<br>线程是进程实现功能的基本单位（组成部分），一个进程至少有一个线程，iOS应用程序默认会自动创建一个主线程，系统会自动维护这个线程的生命周期，如果需要其他的线程，必须程序员手动创建和管理。<br>如果是操作<br>二、NSThread实现多线程<br>1)为什么使用多线程<br>2）怎样用NSThread创建线程<br>1.detachNewThreadSelector:ToTarget:withObject:<br>2.initWithTarget:selector:object:<br>3）怎样用NSThread取消线程，退出线程，监听线程的结束<br>线程退出的三种情况，<br>1）线程执行体执行结束<br>2）线程执行体出错，<br>3）手动退出线程,调用exit方法退出<br>4）线程的优先级<br>优先级的值在0-1之间<br>默认是0.5；<br>值越大，线程执行的概率越高。<br>5)线程锁<br>使用多线程的时候，会出现同一个资源有多个线程访问的情况，在操作系统时间片切换的时候，会出现修改资源出错的情况。<br>需要使用线程锁来解决这种问题<br>//多个线程在修改同一个资源时，会出现问题，解决这个问题的方法通常是给线程加锁。<br>三、NSOperation实现多线程<br>首先需要创建NSOPeration队列<br>1.NSInvocationOperation<br>initWithTarget:(id)target selector<br>2.NSBlockOperation<br>3.继承于NSOperation自定义类型<br>1）首先继承于NSOPeration创建一个类,imageOperation，实现父类里面的main方法<br>2）创建一个队列<br>四、GCD<br>1）block的使用<br>2）GCD实现多线程</p>
+<p>//图片链接<br>1)、<a target="_blank" rel="noopener" href="http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251fb3145e6ca586c9177e3e5346.jpg">http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251fb3145e6ca586c9177e3e5346.jpg</a><br>2)、<a target="_blank" rel="noopener" href="http://img3.3lian.com/2006/027/08/007.jpg">http://img3.3lian.com/2006/027/08/007.jpg</a><br>*/<br>  //GCD (grand central dispatcher)<br>  //GCD是实现多线程的一种方式<br>  //GCD实现多线程也是基于队列的<br>  //通常我们使用block的方式实现多线程<br>  //异步线程中和主线程的执行顺序不固定，一般来说耗时操作应该当放在异步线程中。<br>  /*<br>   1.线程的分工:主线程负责UI,子线程负责其它操作<br>   2.所有跟UI相关的(用户的手势,和用户的交互,信息的展示,动画的展示)都在主线程里面,所以在主线程里面不能人为地添加耗时的操作(访问网络,操作数据库,音频视频文件的解析,解码等)<br>   3.子线程不要去操作UI<br>   4.子线程里面不要再开辟新的子线程,子线程只能由主线程来开辟<br>   一般用法<br>   1.主线程开辟新的子线程<br>   2.子线程负责耗时的工作<br>   3.在相应的工作完成以后,回到主线程,刷新UI<br>   */<br>  //串行(同步,异步)<br>  //并行(同步,异步)<br>  //[self createMainQueue];<br>  //[self createGlobalQueue];<br>  //[self createCreateQueue];<br>  //[self createButton];<br>  //1.同步方式向串行队列提交代码<br>  //[self testSyncWithSerialQueue];<br>  //2.同步方式向并行队列提交代码<br>  //[self testSyncWithConcurrentQueue];<br>  //3.异步方式向串行队列提交代码<br>  [self testAsyncWithSerialQueue];<br>  //4.异步方式向并行队列提交代码<br>  //[self testAsyncWithConcurrentQueue];<br>}<br>//4.异步方式向并行队列提交代码<br>//前面的线程和后面的线程同时执行</p>
+</li>
+<li><p>(void)testAsyncWithConcurrentQueue<br>{<br>  NSLog(@”=====1=====”);<br>  //并行队列<br>  dispatch_queue_t conQueue = dispatch_queue_create(“conQueue”, DISPATCH_QUEUE_CONCURRENT);<br>  NSLog(@”=====2=====”);<br>  //线程一<br>  dispatch_async(conQueue, ^{</p>
+<pre><code>  NSLog(@&quot;=====3=====&quot;);
+  for (int i=0; i&lt;10; i++) &#123;
+      NSLog(@&quot;线程一:%d&quot;,i);
+  &#125;
+  NSLog(@&quot;=====4=====&quot;);</code></pre>
+<p>  });<br>  NSLog(@”=====5=====”);<br>  //线程二<br>  dispatch_async(conQueue, ^{</p>
+<pre><code>  NSLog(@&quot;=====6=====&quot;);
+  for (int i=0; i&lt;10; i++) &#123;
+      NSLog(@&quot;线程二:%d&quot;,i);
+  &#125;
+  NSLog(@&quot;=====7=====&quot;);</code></pre>
+<p>  });<br>  NSLog(@”=====8=====”);<br>}<br>//3.异步方式向串行队列提交代码<br>//前面的线程执行完成后，才开始执行后面的线程</p>
+</li>
+<li><p>(void)testAsyncWithSerialQueue<br>{<br>  NSLog(@”=====1=====”);<br>  //创建串行队列<br>  dispatch_queue_t serialQueue = dispatch_queue_create(“serailQueue”, DISPATCH_QUEUE_SERIAL);<br>  NSLog(@”=====2=====”);<br>  //线程一<br>  dispatch_async(serialQueue, ^{</p>
+<pre><code>  NSLog(@&quot;=====3=====&quot;);
+  for (int i=0; i&lt;10; i++) &#123;
+      NSLog(@&quot;线程一:%d&quot;,i);
+  &#125;
+  NSLog(@&quot;=====4=====&quot;);</code></pre>
+<p>  });<br>  NSLog(@”=====5=====”);<br>  //线程二<br>  dispatch_async(serialQueue, ^{</p>
+<pre><code>  NSLog(@&quot;=====6=====&quot;);
+  for (int i=0; i&lt;10; i++) &#123;
+      NSLog(@&quot;线程二:%d&quot;,i);
+  &#125;
+  NSLog(@&quot;=====7=====&quot;);</code></pre>
+<p>  });<br>  NSLog(@”=====8=====”);<br>}<br>//2.同步方式向并行队列提交代码<br>//前面的线程执行完成后，才开始执行后面的线程</p>
+</li>
+<li><p>(void)testSyncWithConcurrentQueue<br>{<br>  NSLog(@”=====1=====”);<br>  //全局并行队列<br>  //dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);<br>  //创建并行队列<br>  dispatch_queue_t conQueue = dispatch_queue_create(“conQueue”, DISPATCH_QUEUE_CONCURRENT);<br>  NSLog(@”=====2=====”);<br>  //线程一<br>  dispatch_sync(conQueue, ^{</p>
+<pre><code>  NSLog(@&quot;=====3=====&quot;);
+  for (int i=0; i&lt;10; i++) &#123;
+      NSLog(@&quot;线程一:%d&quot;,i);
+  &#125;
+  NSLog(@&quot;=====4=====&quot;);</code></pre>
+<p>  });<br>  NSLog(@”=====5=====”);<br>  //线程二<br>  dispatch_sync(conQueue, ^{</p>
+<pre><code>  NSLog(@&quot;=====6=====&quot;);
+  for (int i=0; i&lt;10; i++) &#123;
+      NSLog(@&quot;线程二:%d&quot;,i);
+  &#125;
+  NSLog(@&quot;=====7=====&quot;);</code></pre>
+<p>  });<br>  NSLog(@”=====8=====”);<br>}<br>//1.同步方式向串行队列提交代码<br>//前面的线程执行完成后，才开始执行后面的线程</p>
+</li>
+<li><p>(void)testSyncWithSerialQueue<br>{<br>  NSLog(@”=====1=====”);<br>  //创建串行队列<br>  dispatch_queue_t serialQueue = dispatch_queue_create(“serialQueue”, DISPATCH_QUEUE_SERIAL);<br>  NSLog(@”=====2=====”);<br>  //线程一<br>  dispatch_sync(serialQueue, ^{</p>
+<pre><code>  NSLog(@&quot;====3=====&quot;);
+  for (int i=0; i&lt;10; i++) &#123;
+      NSLog(@&quot;线程一:%d&quot;,i);
+  &#125;
+  NSLog(@&quot;=====4=====&quot;);</code></pre>
+<p>  });<br>  NSLog(@”=====5=====”);<br>  //线程二<br>  dispatch_sync(serialQueue, ^{</p>
+<pre><code>  NSLog(@&quot;=====6=====&quot;);
+  for (int i=0; i&lt;10; i++) &#123;
+      NSLog(@&quot;线程二:%d&quot;,i);
+  &#125;
+  NSLog(@&quot;=====7=====&quot;);</code></pre>
+<p>  });<br>  NSLog(@”=====8=====”);<br>}</p>
+</li>
+</ul>
+<p>-(void)createMainQueue<br>{<br>    //一、GCD的队列<br>    //1.主线程所在的串行队列<br>    //串行队列:前面的代码执行完成，才开始执行后面的代码,与代码异步提交或同步提交无关<br>    //并行队列:前面的代码和后面的代码同时执行,并行队列执行效率更高,与代码异步提交或同步提交有关<br>    //主线程所在的串行队列//系统自动创建这个队列，直接使用就行<br>    //    //永远不要在同步线程中调用主线程，或造成死锁<br>    //    dispatch_sync(dispatch_get_main_queue(), ^{<br>    //        NSLog(@”你好”);<br>    //    });<br>    //    NSLog(@”恩，今天天气很不错”);<br>    dispatch_queue_t mainQueue = dispatch_get_main_queue();<br>    //1.同步的方式<br>    //永远不要在同步线程中调用主线程，会造成死锁<br>//    dispatch_sync(mainQueue, ^{<br>//        for (int i=0; i&lt;10; i++) {<br>//            NSLog(@”线程一:%d”,i);<br>//        }<br>//    });<br>    /*第一个参数:线程所在的队列<br>     第二个参数:线程的执行体 */<br>    //2.异步的方式<br>    dispatch_async(mainQueue, ^{<br>        for (int i=0; i&lt;10; i++) {<br>            NSLog(@”线程二:%d”,i);<br>        }<br>    });<br>}<br>-(void)createGlobalQueue<br>{<br>    //2.全局的并行队列<br>    //系统自动创建这个队列，直接使用就行<br>    /*第一个参数:队列的优先级<br>     第二个参数:是apple公司的保留参数,传0就行*/<br>    //    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);<br>    //    //1.同步的方式<br>    //    dispatch_sync(globalQueue, ^{<br>    //        for (int i=0; i&lt;10; i++) {<br>    //            NSLog(@”线程一:%d”,i);<br>    //        }<br>    //    });<br>    //    //2.异步的方式<br>    //    dispatch_async(globalQueue, ^{<br>    //        for (int i=0; i&lt;10; i++) {<br>    //            NSLog(@”线程二:%d”,i);<br>    //        }<br>    //    });<br>    //开启异步线程<br>    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{<br>        for (int i = 0; i&lt;10; i++) {<br>            NSLog(@”%d”,i);<br>        }<br>        //dispatch_get_main_queue()是dispatch_queue_t类型<br>        //回到主线程<br>        dispatch_sync(dispatch_get_main_queue(), ^{<br>            NSLog(@”=========”);<br>        });<br>        NSLog(@”你好。”);<br>    });<br>}<br>-(void)createCreateQueue<br>{<br>    //3.自己创建的队列<br>    //1)串行队列<br>    /*第一个参数:队列的标签<br>     第二个参数:队列的类型(串行队列还是并行队列)<br>     //DISPATCH_QUEUE_SERIAL表示串行队列<br>     //DISPATCH_QUEUE_CONCURRENT表示并行队列 */<br>    dispatch_queue_t serialQueue = dispatch_queue_create(“serialQueue”, DISPATCH_QUEUE_SERIAL);<br>    //2)并行队列<br>    dispatch_queue_t concurrentQueue = dispatch_queue_create(“concurrentQueue”, DISPATCH_QUEUE_CONCURRENT);<br>    //二、GCD创建线程<br>    /*第一个参数:线程所在的队列<br>     第二个参数:线程的执行体 */<br>    //1.串行同步的方式<br>//    dispatch_sync(serialQueue, ^{<br>//        for (int i=0; i&lt;10; i++) {<br>//            sleep(1);<br>//            NSLog(@”线程 1 : %d”,i);<br>//        }<br>//        for (int i=0; i&lt;10; i++) {<br>//            NSLog(@”线程 2 : %d”,i);<br>//        }<br>//    });<br>//    NSLog(@”===================1=====================”);<br>//    //并行同步的方式<br>//    dispatch_sync(concurrentQueue, ^{<br>//        for (int i=0; i&lt;10; i++) {<br>//            sleep(1);<br>//            NSLog(@”线程 一 : %d”,i);<br>//        }<br>//        for (int i=0; i&lt;10; i++) {<br>//            NSLog(@”线程 二 : %d”,i);<br>//        }<br>//    });<br>//    NSLog(@”=================2=======================”);<br>//    //2.串行异步的方式<br>//    dispatch_async(serialQueue, ^{<br>//        for (int i=0; i&lt;10; i++) {<br>//            sleep(1);<br>//            NSLog(@”线程 1 : %d”,i);<br>//        }<br>//        for (int i=0; i&lt;10; i++) {<br>//            NSLog(@”线程 2 : %d”,i);<br>//        }<br>//    });<br>//    NSLog(@”================3========================”);<br>//    //2.并行异步的方式<br>    dispatch_async(concurrentQueue, ^{<br>        for (int i=0; i&lt;10; i++) {<br>            sleep(1);<br>            NSLog(@”线程 一 : %d”,i);<br>        }<br>        for (int i=0; i&lt;10; i++) {<br>            NSLog(@”线程 二 : %d”,i);<br>        }<br>    });<br>}<br>-(void)createButton<br>{<br>    //GCD<br>    NSArray *arr=@[@”单例”,@”基本使用”,@”标准用法”,@”线程组”,@”多任务分隔”,@”延时操作”,@”批量创建多任务”];<br>    for (NSInteger i=0; i&lt;arr.count; i++) {<br>        UIButton *btn=[UIButton buttonWithType:UIButtonTypeCustom];<br>        btn.frame=CGRectMake(20, 100+60*i, 140, 40);<br>        [self.view addSubview:btn];<br>        btn.backgroundColor=[UIColor lightGrayColor];<br>        [btn setTitle:arr[i] forState:UIControlStateNormal];<br>        [btn addTarget:self action:@selector(createGCD:) forControlEvents:UIControlEventTouchUpInside];<br>        btn.tag=i;<br>    }<br>}<br>/*=======GCD======*/<br>-(void)createGCD:(UIButton *)sender<br>{<br>    NSLog(@”task0——-%@”,[NSDate date]);<br>    if (sender.tag==0) {<br>        [self createOnce];[self createOnce];[self createOnce];//基本使用<br>    }else if (sender.tag==1){<br>        [self createGCDBase];//标准用法<br>    }else if (sender.tag==2){<br>        [self createGCDStandard];//线程组<br>    }else if (sender.tag==3){<br>        [self createGCDGroup];//多任务分隔<br>    }else if (sender.tag==4){<br>        [self createGCDBarrier];//延时操作<br>    }else if (sender.tag==5){<br>        [self createGCDAfterTime];//延时操作<br>    }else{<br>        [self createApply];//批量创建多任务<br>    }<br>}<br>//代码在程序运行工程中只执行一次<br>//通常用来实现单例<br>-(void)createOnce{<br>    static dispatch_once_t onceToken;<br>    dispatch_once(&amp;onceToken, ^{<br>        NSLog(@”执行了一次”);<br>    });<br>}<br>-(void)createGCDBase{<br>    //创建一个线程队列<br>    //参数1:表示名字,只是一个标识<br>    //参数2:表示当前线程队列的类型<br>    //类型有2种:<br>    //DISPATCH_QUEUE_CONCURRENT:表示异步队列<br>    //DISPATCH_QUEUE_SERIAL:表示同步队列<br>    dispatch_queue_t queue = dispatch_queue_create(“lin.thread”, DISPATCH_QUEUE_CONCURRENT);<br>    //将一个任务(block),以异步/同步的形式加到queue这个线程队列中//把a去掉即为同步执行<br>    dispatch_sync(queue, ^{<br>        [self task1];<br>    });<br>    dispatch_async(queue, ^{<br>        [self task2];<br>    });<br>    dispatch_async(queue, ^{<br>        [self task3];<br>    });<br>    //要想让任务异步执行,必须以异步的方式将任务加入到异步队列<br>    //如果在队列中上一个是同步线程,不管下一个任务是同步还是异步,一定等该线程执行完后再执行下一个任务<br>    //如果上一个是异步任务,则下一个任务不管是异步还是同步,都可同时执行<br>}<br>-(void)createGCDStandard{<br>    //获取系统自带的线程队列<br>    //DISPATCH_QUEUE_PRIORITY_HIGH:表示线程队列的优先级<br>    //一共有四个优先级,2,0,-2,INT16_MIN<br>    //系统自带的线程队列一共有5个,上面分别对应4个,在加一个主线程队列,主队列是同步的,其他的4个是异步的<br>    dispatch_async(dispatch_get_global_queue(0, 0), ^{<br>        //进入到子线程,做耗时的工作<br>        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@”<a target="_blank" rel="noopener" href="http://ww2.sinaimg.cn/large/3f8d13d7jw1ev2iz5f7mgj20yi1pctff.jpg&quot;]]">http://ww2.sinaimg.cn/large/3f8d13d7jw1ev2iz5f7mgj20yi1pctff.jpg&quot;]]</a>;<br>        dispatch_async(dispatch_get_main_queue(), ^{<br>            //回到主线程<br>            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(100, 100, 200, 300)];<br>            img.image = [UIImage imageWithData:data];<br>            [self.view addSubview:img];<br>            NSLog(@”task0——-%@”,[NSDate date]);<br>        });<br>    });<br>}<br>//group方式(把线程放到一个组里面)<br>-(void)createGCDGroup{<br>    //队列<br>    dispatch_queue_t queue = dispatch_queue_create(“com”, DISPATCH_QUEUE_CONCURRENT);<br>    //任务block必须放到线程队列中才能运行<br>    //同时将任务放到线程组中进行管理,线程组可以监视到任务的完成状态<br>    //创建一个线程组:用来监视这个组里面的所有线程完成状态<br>    //组<br>    dispatch_group_t group = dispatch_group_create();<br>    /*第一个参数:线程组<br>     第二个参数:线程执行体所在的队列<br>     第三个参数:线程执行体代码 */<br>    //线程一<br>    dispatch_group_async(group, queue, ^{<br>        [self task1];<br>    });<br>    //线程二<br>    dispatch_group_async(group, queue, ^{<br>        [self task2];<br>    });<br>    //线程三<br>    dispatch_group_async(group, queue, ^{<br>        [self task3];<br>    });<br>    //当所有的线程组里面管理的线程全部执行完成后,执行以下任务<br>    dispatch_group_notify(group, queue, ^{<br>        NSLog(@”全部完成”);<br>    });<br>}<br>//在线程之间去执行一些代码<br>-(void)createGCDBarrier{<br>    //并行队列<br>    //不能使用系统的全局并行队列<br>    //前提条件,必须自己创建新的线程队列<br>    //系统自带的线程队列有5个,4种不同的优先级对应4个线程队列(异步的)+主线程队列(同步)<br>    dispatch_queue_t queue = dispatch_queue_create(“com”, DISPATCH_QUEUE_CONCURRENT);<br>    //线程一<br>    dispatch_async(queue, ^{<br>        [self task1];<br>    });<br>    //线程二<br>    dispatch_async(queue, ^{<br>        [self task2];<br>    });<br>    //线程三<br>    dispatch_async(queue, ^{<br>        [self task3];<br>    });<br>    //在线程一和线程二线程三都执行结束，在线程四执行之前执行一些代码<br>    dispatch_barrier_async(queue, ^{<br>        NSLog(@”中断”);<br>    });<br>    //线程四<br>    dispatch_async(queue, ^{<br>        [self task1];<br>    });<br>    //线程五<br>    dispatch_async(queue, ^{<br>        [self task2];<br>    });<br>    //线程六<br>    dispatch_async(queue, ^{<br>        [self task3];<br>    });<br>}<br>//代码在一段时间之后执行<br>-(void)createGCDAfterTime{<br>    //延时操作<br>    NSLog(@”开始执行”);<br>    //当前时间点延后3秒<br>    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW , NSEC_PER_SEC*3);<br>    /*第一个参数:代码执行的时间<br>     第二个参数:代码块所在的队列<br>     第三个参数:线程的执行体 */<br>    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_queue_create(“myQueue”, DISPATCH_QUEUE_CONCURRENT), ^{<br>        NSLog(@”三秒后执行”);<br>    });<br>    dispatch_after(time, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{<br>        NSLog(@”执行了after”);<br>    });<br>}<br>//代码块执行多次<br>-(void)createApply{<br>    //批量创建多任务<br>    //参数1:任务数,代码块执行的次数<br>    //参数2:线程所在的队列<br>    //参数3:任务(参数:当前这个任务是第几个,任务下标)每次执行时调用的代码,线程的执行体<br>    //在主线程中(dispatch_get_main_queue)不能调用dispatch_apply循环，会造成死锁<br>    size_t t = 100;<br>    dispatch_apply(t, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t n) {<br>        NSLog(@”第%zu个任务”,n);<br>    });<br>    /*<br>     tableView的时候根据下载的数据的内容的不同,cell的高度不一样,得到没有个cell的高度–&gt;不能放在tableView的代理方法里面<br>     解决方法:<br>     在cell对应的数据模型里面添加一个属性:cell的高度<br>     在数据解析的时候,解析完成直接计算出cell的高度(可以用以上这个方法)<br>     在cell的高度的代理方法里面直接返回model的对应属性<br>     <em>/<br>    /</em><br>     瀑布流的cell的高度的计算,也可以使用这个方法<br>     */<br>    //NSMutableArray *arr = nil;<br>    NSMutableArray *arr=[[NSMutableArray alloc] initWithObjects:@”lin”,@”ya”,@”fei”, nil];<br>    dispatch_apply(arr.count, dispatch_get_global_queue(0, 0), ^(size_t n) {<br>        NSObject *model = arr[n];<br>        NSLog(@”%@”,model);<br>    });<br>}<br>-(void)createThreatOne<br>{<br>    UIImageView *imageView=[[UIImageView alloc] initWithFrame:CGRectMake(50, 100, 200, 150)];<br>    [self.view addSubview:imageView];<br>    imageView.backgroundColor=[UIColor purpleColor];<br>    //下载图片<br>    //全局的并行队列 ,后一个是苹果公司预留的参数<br>    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);<br>    dispatch_async(globalQueue, ^{<br>        //下载数据<br>        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@”<a target="_blank" rel="noopener" href="http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251fb3145e6ca586c9177e3e5346.jpg&quot;]]">http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251fb3145e6ca586c9177e3e5346.jpg&quot;]]</a>;<br>        //回到主线程修改UI<br>        dispatch_queue_t mainQueue = dispatch_get_main_queue();<br>        dispatch_async(mainQueue, ^{<br>            imageView.image = [UIImage imageWithData:data];<br>        });<br>        //回到主线程刷新UI<br>        //[self performSelectorOnMainThread:@selector(refreshImageView:) withObject:data waitUntilDone:YES];<br>    });<br>}<br>-(void)task1{<br>    sleep(2);<br>    NSLog(@”task1——-%@”,[NSDate date]);<br>}<br>-(void)task2{<br>    sleep(3);<br>    NSLog(@”task2——-%@”,[NSDate date]);<br>}<br>-(void)task3{<br>    sleep(4);<br>    NSLog(@”task3——-%@”,[NSDate date]);<br>}<br>@end</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

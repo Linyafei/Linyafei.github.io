@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS 多语言的使用"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS 多语言的使用 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS 多语言的使用</div>
+  <div id="post_time">2016-11-15</div>
+
+  <div id="post_content"> <p>我们首先要在 PROJECT -&gt; Info -&gt; Localization 中添加想要的语言，添加后就可以在名为Localization.strings 文件中根据键值对的方式添加对应的不同语言 如在中文中添加   “KeyOne”=”你好”;    在英文中添加    “KeyOne”=”Hello”;<br>我们使用时是通过  “KeyOne” 来统一调用的</p>
+<p>定义一个宏<br>#define ASLocalizedString(key)  [NSString stringWithFormat:@”%@”, [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@”%@”,[[NSUserDefaults standardUserDefaults] objectForKey:@”appLanguage”]] ofType:@”lproj”]] localizedStringForKey:(key) value:nil table:@”LocalizationLin”]]</p>
+<p>使用时用这个宏统一调用</p>
+<p>如下</p>
+<p>#import &lt;UIKit/UIKit.h&gt;<br>@interface MyVC : UIViewController<br>@end</p>
+<p>#import “MyVC.h”</p>
+<p>#define ASLocalizedString(key)  [NSString stringWithFormat:@”%@”, [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@”%@”,[[NSUserDefaults standardUserDefaults] objectForKey:@”appLanguage”]] ofType:@”lproj”]] localizedStringForKey:(key) value:nil table:@”LocalizationLin”]]</p>
+<p>@interface MyVC ()</p>
+<p>@property(nonatomic,strong)UILabel *languageLabel;</p>
+<p>@end</p>
+<p>@implementation ViewController</p>
+<ul>
+<li>(void)viewDidLoad {<br>  [super viewDidLoad];<br>  // Do any additional setup after loading the view, typically from a nib.</li>
+</ul>
+<pre><code>[self createLanguageNSLog];//打印当前语言
+[self createLanguageLabel];//默认语言
+[self createLanguageImageView];//默认图片
+
+[self createLanguageButton];
+[self createLanguageLabel2];//手动设置语言</code></pre>
+<p>}<br>-(void)createLanguageNSLog<br>{<br>    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];<br>    //取得iPhone支持的所有语言设置<br>    NSArray *languages=[defaults objectForKey:@”AppleLanguages”];<br>    NSLog(@”languages==%@”,languages);</p>
+<pre><code>//获取当前使用语言
+NSArray *languages2=[NSLocale preferredLanguages];
+NSLog(@&quot;languages2==%@&quot;,languages2);
+NSString *currentLanguage=[languages2 objectAtIndex:0];
+NSLog(@&quot;currentLanguage==%@&quot;,currentLanguage);
+
+//用获取到的当前语言，和支持的语言做字符串对比
+if([currentLanguage isEqualToString:@&quot;en&quot;]) &#123;
+    NSLog(@&quot;current Language:en&quot;);
+&#125;else&#123;
+    NSLog(@&quot;current Language:zh-Hans-US&quot;);
+&#125;</code></pre>
+<p>}<br>-(void)createLanguageLabel<br>{<br>    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, 250, 40)];<br>    [self.view addSubview:label];<br>    label.backgroundColor=[UIColor lightGrayColor];<br>//    label.text = NSLocalizedString(@”KeyOne”, @”注释”);<br>    label.text = NSLocalizedStringFromTable(@”KeyTwo”,@”LocalizationLin”, @”注释”);</p>
+<pre><code>//NSString *str1=[NSString stringWithFormat:@&quot;%@&quot;,[[NSUserDefaults standardUserDefaults] objectForKey:@&quot;appLanguage&quot;]];//设置语言
+NSString *language=[[NSBundle mainBundle] pathForResource:@&quot;zh-Hans&quot; ofType:@&quot;lproj&quot;];//获得语言类型
+NSBundle *languagePath=[NSBundle bundleWithPath:language];//获得语言路径
+NSString *languageStr=[languagePath localizedStringForKey:@&quot;KeyTwo&quot; value:nil table:@&quot;LocalizationLin&quot;];//从相应的语言文件名获得相应的字符
+label.text=languageStr;
+NSLog(@&quot;str4 == %@&quot;,languageStr);
+
+
+NSLog(@&quot;str5 == %@&quot;,[[NSBundle mainBundle] localizedStringForKey:@&quot;KeyOne&quot; value:@&quot;&quot; table:nil]);
+NSLog(@&quot;str6 == %@&quot;,[[NSBundle mainBundle] localizedStringForKey:@&quot;KeyTwo&quot; value:@&quot;&quot; table:@&quot;LocalizationLin&quot;]);</code></pre>
+<p>}<br>-(void)createLanguageImageView<br>{<br>    UIImageView *img=[[UIImageView alloc]initWithFrame:CGRectMake(20, 100, 140, 140)];<br>    [self.view addSubview:img];<br>    img.backgroundColor=[UIColor lightGrayColor];<br>    img.image=[UIImage imageNamed:NSLocalizedStringFromTable(@”ImageKey”,@”LocalizationLin”, nil)];<br>}<br>-(void)createLanguageButton<br>{<br>    for (NSInteger i=0; i&lt;2; i++) {<br>        UIButton <em>btn=[UIButton buttonWithType:UIButtonTypeCustom];<br>        btn.frame=CGRectMake(20, 320+60</em>i, 200, 40);<br>        [self.view addSubview:btn];<br>        btn.backgroundColor=[UIColor orangeColor];<br>        [btn addTarget:self action:@selector(changeLanguage:) forControlEvents:UIControlEventTouchUpInside];<br>        btn.tag=101+i;<br>    }<br>}<br>-(void)changeLanguage:(UIButton *)sender<br>{<br>    NSUserDefaults *languageDefault=[NSUserDefaults standardUserDefaults];<br>    switch (sender.tag) {<br>        case 101: {<br>            [languageDefault setObject:@”zh-Hans” forKey:@”appLanguage”];<br>            [languageDefault synchronize];<br>        }<br>            break;<br>        case 102: {<br>            [languageDefault setObject:@”en” forKey:@”appLanguage”];<br>            [languageDefault synchronize];<br>        }<br>            break;<br>        default:<br>            break;<br>    }<br>    [self changeLanguageLabel2];<br>}<br>-(void)createLanguageLabel2<br>{<br>    //先设置默认语言<br>    NSUserDefaults *languageDefault=[NSUserDefaults standardUserDefaults];<br>    [languageDefault setObject:@”en” forKey:@”appLanguage”];<br>    [languageDefault synchronize];<br>    self.languageLabel=[[UILabel alloc]initWithFrame:CGRectMake(20, 260, 200, 40)];<br>    [self.view addSubview:self.languageLabel];<br>    self.languageLabel.backgroundColor=[UIColor purpleColor];<br>    self.languageLabel.text = ASLocalizedString(@”KeyTwo”);<br>}</p>
+<ul>
+<li>(void)changeLanguageLabel2<br>{<br>  self.languageLabel.text = ASLocalizedString(@”KeyTwo”);<br>}</li>
+</ul>
+<ul>
+<li>(void)didReceiveMemoryWarning {<br>  [super didReceiveMemoryWarning];<br>  // Dispose of any resources that can be recreated.<br>}<br>@end</li>
+</ul> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="Git 常用命令"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>Git 常用命令 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">Git 常用命令</div>
+  <div id="post_time">2016-09-23</div>
+
+  <div id="post_content"> <p>git config 的工具，专门用来配置或读取相应的工作环境变量。<br>git 配置用户信息<br>git config –system   //系统级<br>git config –global   //用户级<br>git config            //当前文件级<br>git config –global user.name “linyafei”<br>git config –global user.email “<a href="mailto:&#108;&#105;&#110;&#121;&#97;&#x66;&#x65;&#105;&#x79;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#108;&#105;&#110;&#121;&#97;&#x66;&#x65;&#105;&#x79;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>“<br>文本编辑器<br>git config –global core.editor emacs/Vim/Vi<br>差异分析工具<br>git config –global merge.tool vimdiff</p>
+<p>查看配置信息<br>git config –list<br>vim ~/.gitconfig<br>git config user.name</p>
+<p>查看帮助<br>git help<br>git help pull<br>git pull –help<br>man git -pull</p>
+<p>创建仓库<br>git init <repo_name></p>
+<p>命令用于查看项目的当前状态。查看在你上次提交之后是否有修改。<br>git status<br>git status -s      获得简短的结果输出<br>AM 状态的意思是，这个文件在我们将它添加到缓存之后又有改动</p>
+<p>执行 git diff 来查看执行 git status 的结果的详细信息。<br>git diff             尚未缓存的改动<br>git diff –cached       查看已缓存的改动<br>git diff HEAD.       查看已缓存的与未缓存的所有改动<br>git diff –stat      显示摘要而非整个 diff</p>
+<p>命令可将文件添加到缓存<br>git add .<br>git add test.txt</p>
+<p>将缓存区内容添加到仓库中<br>git commit -m “add test.txt”<br>git commit -am “xxx”    add 和 commit 命令合并使用  </p>
+<p>暂存区的目录树会被重写，被 master 分支指向的目录树所替换，但是工作区不受影响。<br>git reset HEAD     命令用于取消已缓存的内容。<br><del>倒数第二次提交<br>git reset –hard HEAD</del><br>命令用于取消已缓存的内容<br>git reset HEAD<br>git reset HEAD &lt;文件&gt;</p>
+<p>git rm <file> 会将文件从缓存区和你的硬盘中（工作目录）删除。<br>会直接从暂存区删除文件，工作区则不做出改变<br>git rm –cached <file>  不从工作区中删除文件</p>
+<p>要从Git中移除某个文件，就必须要从已跟踪文件清单中移除，然后提交<br>git rm <file><br>如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 -f<br>git rm -f <file><br>如果把文件从暂存区域移除，但仍然希望保留在当前工作目录中，换句话说，仅是从跟踪清单中删除，使用 –cached 选项即可<br>git rm –cached <file></p>
+<p>可以递归删除，即如果后面跟的是一个目录做为参数，则会递归删除整个目录中的所有子目录和文件：<br>git rm –r * </p>
+<p>命令时，会用暂存区全部或指定的文件替换工作区的文件。这个操作很危险，会清除工作区中未添加到暂存区的改动。<br>git checkout . 或者 git checkout – <file></p>
+<p>命令时，会用 HEAD 指向的 master 分支中的全部或者部分文件替换暂存区和以及工作区中的文件。这个命令也是极具危险<br>性的，因为不但会清除工作区中未提交的改动，也会清除暂存区中未提交的改动。<br>git checkout HEAD .” 或者 “git checkout HEAD <file>“ </p>
+<p>命令用于移动或重命名一个文件、目录、软连接。<br>git mv<br>git mv readme.txt readme2.txt</p>
+<p>git clone <repo><br>git clone &lt;仓库名&gt; &lt;新路径&gt;<br>touch .gitignore  在忽略文件里的文件不回添加到仓库中   </p>
+<p>前边有 * 代表是当前分支<br>无参数显示所有分支<br>git branch<br>创建分支<br>git branch (branchname)</p>
+<p>切换分支命令:<br>git checkout (branchname)<br>创建新分支并立即切换到该分支下，从而在该分支中操作。<br>git checkout -b (branchname) </p>
+<p>删除分支命令：<br>git branch -d (branchname)</p>
+<p>合并分支命令:<br>git merge </p>
+<p>列出历史提交记录<br>git log<br>查看历史记录的简洁版本<br>git log –oneline<br>查看历史中什么时候出现了分支、合并<br>git log –graph<br>逆向显示所有日志<br>git log –reverse –oneline<br>查找指定用户的提交日志<br>git log –author=lyf –oneline -5</p>
+<p>如果你要指定日期，可以执行几个选项：–since 和 –before，但是你也可以用 –until 和 –after<br>git log –oneline –before={3.weeks.ago} –after={2010-04-18}  </p>
+<p>标签信息<br>git log –decorate<br>git log –oneline –decorate –graph</p>
+<p>查看标签<br>git tag<br>添加标签<br>git tag -a v1.0<br>指定标签信息命令：<br>git tag -a <tagname> -m “runoob.com标签”<br>PGP签名标签命令：<br>git tag -s <tagname> -m “runoob.com标签”</p>
+<p>查看当前的远程库<br>git remote<br>git remote -v.     执行时加上 -v 参数，你还可以看到每个别名的实际链接地址。</p>
+<p>提取远程仓库<br>git fetch     从远程仓库下载新分支与数据<br>git pull    从远端仓库提取数据并尝试合并到当前分支</p>
+<p>推送到远程仓库<br>git push [alias] [branch]</p>
+<p>删除远程仓库<br>git remote rm [别名]</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

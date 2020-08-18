@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="Flutter 和 原生互相调用传递数据"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>Flutter 和 原生互相调用传递数据 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">Flutter 和 原生互相调用传递数据</div>
+  <div id="post_time">2020-04-16</div>
+
+  <div id="post_content"> <p>Flutter 中使用通道和原生进行数据传递和交互</p>
+<p>1 FlutterBasicMessageChannel   相互传递数据流信息<br>2 FlutterMethodChannel      相互调用方法<br>3 FlutterEventChannel      单向监听数据变化</p>
+<p>一  FlutterEventChannel 的使用<br>1 在Flutter 端<br>static const messageChannel = const BasicMessageChannel(‘basic_channel_page’, StandardMessageCodec());</p>
+<p>//发送消息<br>Future<void> sendMessage(Map json) async {<br>  Map reply = await messageChannel.send(json);<br>  print(“—–reply——–$reply——–”);<br>}<br>//接收消息监听<br>void receiveMessage() {<br>  print(“—receiveMessage——-“);<br>  messageChannel.setMessageHandler((result) async {<br>    print(“—result———-$result——–”);<br>    return ‘Flutter 已收到消息’;<br>  });<br>}</p>
+<p>2 在原生iOS 端<br>#import &lt;Flutter/Flutter.h&gt;<br>@implementation BasicChannel<br>-(void)basicMessageChannelFunction:(UIWindow <em>)window<br>{<br>    FlutterViewController</em> controller = (FlutterViewController*)window.rootViewController;<br>    // 初始化定义<br>    FlutterBasicMessageChannel *messageChannel = [FlutterBasicMessageChannel messageChannelWithName:@”basic_channel_page” binaryMessenger:[controller binaryMessenger]];</p>
+<pre><code>//__weak __typeof__(self) weakSelf = self;
+__weak __typeof__(messageChannel) weakMessageChannel = messageChannel;
+// 接收消息监听
+[messageChannel setMessageHandler:^(id message, FlutterReply callback) &#123;
+    NSLog(@&quot;---BasicMessageChannelFunction------%@--------&quot;,message);
+    if ([method isEqualToString:@&quot;basicchannel1&quot;]) &#123;
+        [weakMessageChannel sendMessage:@&quot;&quot;]; // 发送消息到Flutter
+    &#125;
+&#125;];</code></pre>
+<p>}<br>@end</p>
+<p>二   FlutterMethodChannel 的使用<br>1 在Flutter 端<br>static const methodChannel = const MethodChannel(‘method_channel_page’);</p>
+<p>  static Future<dynamic> invokNative(String method, {Map arguments}) async {<br>    print(“———invokeMethod———-“);<br>         return await methodChannel.invokeMethod(method, arguments);<br>  }</p>
+<p>  Future<dynamic> nativeMessageListener() async {<br>    // ignore: missing_return<br>    methodChannel.setMethodCallHandler((resultCall) {<br>      MethodCall call = resultCall;<br>      String method = call.method;<br>      Map arguments = call.arguments;<br>      print(“—resultCall———$resultCall—————“);<br>      print(“—method———$method—————“);<br>      print(“—arguments———$arguments—————“);<br>    });<br>  }</p>
+<p>2 在原生iOS 端<br>#import &lt;Flutter/Flutter.h&gt;<br>@implementation MethodChannel<br>-(void)methodChannelFunction:(UIWindow <em>)window<br>{<br>    FlutterViewController</em> controller = (FlutterViewController*)window.rootViewController;<br>    FlutterMethodChannel *methodChannel = [FlutterMethodChannel methodChannelWithName:@”method_channel_page” binaryMessenger:[controller binaryMessenger]];<br>    //<strong>weak __typeof</strong>(self) weakSelf = self;<br>    <strong>weak __typeof</strong>(methodChannel) weakMethodChannel = methodChannel;<br>    [methodChannel setMethodCallHandler:^(FlutterMethodCall *call, FlutterResult result) {<br>        NSLog(@”–method–%@—-arguments–%@–”,[call method],[call arguments]);<br>        if([[call method] isEqualToString:@”methodchannel1”]) {<br>            NSLog(@”ios methodchannel1”);<br>            NSDictionary *dict = @{@”code” : [NSNumber numberWithInt:210], @”message” : @”this is ios methodchannel1”};<br>            result(dict);<br>        }else if([call.method isEqualToString:@”methodchannel2”]){<br>            NSLog(@”ios methodchannel2”);<br>            NSDictionary *dict = @{@”code” : [NSNumber numberWithInt:220], @”message” : @”this is ios methodchannel2”};<br>            [weakMethodChannel invokeMethod:@”MethodChannel2” arguments:dict];<br>        }else{<br>            result([FlutterError errorWithCode:@”error code” message:@”error message” details:@”error details”]);<br>            result(FlutterMethodNotImplemented);<br>        }<br>    }];<br>}<br>@end</p>
+<p>三 FlutterEventChannel 的使用</p>
+<p>1 在Flutter 端<br>static const EventChannel _eventChannel = const EventChannel(‘event_channel_page’);</p>
+<p>  Future<dynamic> nativeMessageListener() async {<br>    _eventChannel.receiveBroadcastStream().listen((arguments) {<br>      print(“—-arguments————–$arguments——–”);<br>    }, onError: (event) {});<br>  }</p>
+<p>2 在原生iOS 端<br>#import &lt;Flutter/Flutter.h&gt;<br>@interface EventChannel()<FlutterStreamHandler><br>{<br>    FlutterEventSink _eventSink;<br>}<br>@end<br>@implementation EventChannel<br>-(void)eventChannelFunction:(UIWindow <em>)window<br>{<br>    FlutterViewController</em> controller = (FlutterViewController*)window.rootViewController;<br>    FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@”event_channel_page” binaryMessenger:[controller binaryMessenger]];<br>    [eventChannel setStreamHandler:self];<br>}<br>// 这个onListen是Flutter端开始监听这个channel时的回调，第二个参数 EventSink是用来传数据的载体。</p>
+<ul>
+<li>(FlutterError* _Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(FlutterEventSink)events {<br>  _eventSink = events;<br>  if (events) {<pre><code>  if (@available(iOS 10.0, *)) &#123;
+      NSLog(@&quot;----------------aaaaaaaa---------------------&quot;);
+      //__weak __typeof__(self) weakSelf = self;
+      [NSTimer scheduledTimerWithTimeInterval:5 repeats:true block:^(NSTimer * _Nonnull timer) &#123;
+          NSDictionary *dict = @&#123;@&quot;code&quot; : [NSNumber numberWithInt:210], @&quot;message&quot; : @&quot;this is ios EventChannel1&quot;&#125;;
+          self-&gt;_eventSink(dict);
+      &#125;];
+  &#125; else &#123;
+      NSLog(@&quot;-----------------bbbbbbb--------------------&quot;);
+      [NSTimer timerWithTimeInterval:5 target:self selector:@selector(abc) userInfo:nil repeats:true];
+  &#125;</code></pre>
+  }<br>  return nil;<br>}</li>
+<li>(FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments {<br>  _eventSink = nil;<br>  return nil;<br>}</li>
+<li>(void)abc<br>{<br>  NSDictionary *dict = @{@”code” : [NSNumber numberWithInt:220], @”message” : @”this is ios EventChannel2”};<br>  _eventSink(dict);<br>}<br>@end</li>
+</ul> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

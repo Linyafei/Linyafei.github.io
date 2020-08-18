@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="获取经纬度"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>获取经纬度 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">获取经纬度</div>
+  <div id="post_time">2017-09-17</div>
+
+  <div id="post_content"> <p>import UIKit<br>import CoreLocation</p>
+<p>class CoreLocationVC: UIViewController ,CLLocationManagerDelegate{<br>    var label: UILabel!<br>    var locationManager: CLLocationManager!<br>    override func viewDidLoad() {<br>        super.viewDidLoad()<br>        // Do any additional setup after loading the view.<br>        createCoreLocation()<br>    }<br>    func createCoreLocation() {<br>        locationManager = CLLocationManager()<br>        locationManager.delegate = self<br>        locationManager.desiredAccuracy = kCLLocationAccuracyBest<br>        locationManager.distanceFilter = 1000.0<br>        label = UILabel(frame: CGRect(x: 20, y: 80, width: 280, height: 100))<br>        label.numberOfLines = 2<br>        label.backgroundColor = UIColor.brown<br>        self.view.addSubview(label)<br>        if CLLocationManager.authorizationStatus() == .notDetermined {<br>            locationManager.requestAlwaysAuthorization()<br>        }<br>    }<br>    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {<br>        switch status {<br>        case .denied:<br>            print(“用户拒绝您对地理设备使用的要求”)<br>            break<br>        default:<br>            manager.startUpdatingLocation()<br>            break<br>        }<br>    }<br>    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {<br>        locationManager.stopUpdatingLocation()<br>        let location: CLLocation = locations[0]<br>        let latitude = location.coordinate.latitude<br>        let longitude = location.coordinate.longitude<br>        label.text = “经度：(longitude) 纬度：(latitude)”<br>        let geoccder = CLGeocoder()<br>        let location2 = CLLocation(latitude: 31.217, longitude: 121.418)<br>        geoccder.reverseGeocodeLocation(location2) { (placeMarks:[CLPlacemark]?, error: Error?) in<br>            print(“(String(describing: placeMarks))”)<br>            if (placeMarks?.count)! &gt; 0<br>            {<br>                let placeMark = placeMarks?.first<br>                print(placeMark?.name! as Any)<br>            }<br>        }<br>    }<br>}</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

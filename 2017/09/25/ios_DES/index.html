@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS DES加密/解密"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS DES加密/解密 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS DES加密/解密</div>
+  <div id="post_time">2017-09-25</div>
+
+  <div id="post_content"> <p>iOS通过DES 加密/解密，要导入 base64文件自己下载</p>
+<p>#import &lt;Foundation/Foundation.h&gt;<br>@interface LYFDES : NSObject</p>
+<ul>
+<li>(NSString*)encrypt:(NSString*)plainText;</li>
+<li>(NSString*)decrypt:(NSString*)encryptText;</li>
+</ul>
+<p>+(NSString <em>) encryptUseDES:(NSString *)clearText key:(NSString *)key;<br>+(NSString</em>) decryptUseDES:(NSString*)cipherText key:(NSString*)key;</p>
+<ul>
+<li>(NSData*)encryptlyf:(NSString*)plainText;</li>
+<li>(NSString*)decryptlyf:(NSData*)encryptData;<br>@end</li>
+</ul>
+<p>#import “LYFDES.h”<br>#import &lt;CommonCrypto/CommonCryptor.h&gt;<br>#import “GTMBase64.h”<br>//密钥<br>#define gkey @”mobilewinx@easipass@1234”<br>//偏移量<br>#define gIv @”01234567”</p>
+<p>@implementation LYFDES<br>#pragma mark - 加密方法</p>
+<ul>
+<li><p>(NSString*)encrypt:(NSString*)plainText {<br>  NSData* data = [plainText dataUsingEncoding:NSUTF8StringEncoding];<br>  size_t plainTextBufferSize = [data length];<br>  const void *vplainText = (const void *)[data bytes];</p>
+<p>  CCCryptorStatus ccStatus;<br>  uint8_t *bufferPtr = NULL;<br>  size_t bufferPtrSize = 0;<br>  size_t movedBytes = 0;</p>
+<p>  bufferPtrSize = (plainTextBufferSize + kCCBlockSize3DES) &amp; ~(kCCBlockSize3DES - 1);<br>  bufferPtr = malloc( bufferPtrSize * sizeof(uint8_t));<br>  memset((void *)bufferPtr, 0x0, bufferPtrSize);</p>
+<p>  const void *vkey = (const void *) [gkey UTF8String];<br>  const void *vinitVec = (const void *) [gIv UTF8String];</p>
+<p>  ccStatus = CCCrypt(kCCEncrypt,</p>
+<pre><code>                 kCCAlgorithm3DES,
+                 kCCOptionPKCS7Padding,
+                 vkey,
+                 kCCKeySize3DES,
+                 vinitVec,
+                 vplainText,
+                 plainTextBufferSize,
+                 (void *)bufferPtr,
+                 bufferPtrSize,
+                 &amp;movedBytes);</code></pre>
+<p>  NSData *myData = [NSData dataWithBytes:(const void *)bufferPtr length:(NSUInteger)movedBytes];<br>  NSString *result = [GTMBase64 stringByEncodingData:myData];<br>  return result;<br>}<br>// 解密方法</p>
+</li>
+<li><p>(NSString*)decrypt:(NSString*)encryptText {<br>  NSData *encryptData = [GTMBase64 decodeData:[encryptText dataUsingEncoding:NSUTF8StringEncoding]];<br>  size_t plainTextBufferSize = [encryptData length];<br>  const void *vplainText = [encryptData bytes];</p>
+<p>  CCCryptorStatus ccStatus;<br>  uint8_t *bufferPtr = NULL;<br>  size_t bufferPtrSize = 0;<br>  size_t movedBytes = 0;</p>
+<p>  bufferPtrSize = (plainTextBufferSize + kCCBlockSize3DES) &amp; ~(kCCBlockSize3DES - 1);<br>  bufferPtr = malloc( bufferPtrSize * sizeof(uint8_t));<br>  memset((void *)bufferPtr, 0x0, bufferPtrSize);</p>
+<p>  const void *vkey = (const void *) [gkey UTF8String];<br>  const void *vinitVec = (const void *) [gIv UTF8String];</p>
+<p>  ccStatus = CCCrypt(kCCDecrypt,</p>
+<pre><code>                 kCCAlgorithm3DES,
+                 kCCOptionPKCS7Padding,
+                 vkey,
+                 kCCKeySize3DES,
+                 vinitVec,
+                 vplainText,
+                 plainTextBufferSize,
+                 (void *)bufferPtr,
+                 bufferPtrSize,
+                 &amp;movedBytes);</code></pre>
+<p>  NSString *result = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)bufferPtr</p>
+<pre><code>                                                               length:(NSUInteger)movedBytes] encoding:NSUTF8StringEncoding];</code></pre>
+<p>  return result;<br>}<br>//方法二</p>
+</li>
+<li><p>(NSString*) decryptUseDES:(NSString*)cipherText key:(NSString*)key<br>{<br>   // 利用 GTMBase64 解碼 Base64 字串<br>   NSData* cipherData = [GTMBase64 decodeString:cipherText];<br>   unsigned char buffer[1024];<br>   memset(buffer, 0, sizeof(char));<br>   size_t numBytesDecrypted = 0;<br>   // IV 偏移量不需使用<br>   CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt,</p>
+<pre><code>                                     kCCAlgorithmDES,
+                                     kCCOptionPKCS7Padding | kCCOptionECBMode,
+                                     [key UTF8String],
+                                     kCCKeySizeDES,
+                                     nil,
+                                     [cipherData bytes],
+                                     [cipherData length],
+                                     buffer,
+                                     1024,
+                                     &amp;numBytesDecrypted);</code></pre>
+<p>   NSString* plainText = nil;<br>   if (cryptStatus == kCCSuccess) {</p>
+<pre><code>   NSData* data = [NSData dataWithBytes:buffer length:(NSUInteger)numBytesDecrypted];
+   plainText = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];</code></pre>
+<p>   }<br>   return plainText;<br>}</p>
+</li>
+<li><p>(NSString *) encryptUseDES:(NSString *)clearText key:(NSString *)key<br>{<br>   NSData *data = [clearText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];<br>   unsigned char buffer[1024];<br>   memset(buffer, 0, sizeof(char));<br>   size_t numBytesEncrypted = 0;</p>
+<p>   CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt,</p>
+<pre><code>                                     kCCAlgorithmDES,
+                                     kCCOptionPKCS7Padding | kCCOptionECBMode,
+                                     [key UTF8String],
+                                     kCCKeySizeDES,
+                                     nil,
+                                     [data bytes],
+                                     [data length],
+                                     buffer,
+                                     1024,
+                                     &amp;numBytesEncrypted);</code></pre>
+<p>   NSString* plainText = nil;<br>   if (cryptStatus == kCCSuccess) {</p>
+<pre><code>   NSData *dataTemp = [NSData dataWithBytes:buffer length:(NSUInteger)numBytesEncrypted];
+   plainText = [GTMBase64 stringByEncodingData:dataTemp];</code></pre>
+<p>   }else{</p>
+<pre><code>   NSLog(@&quot;DES加密失败&quot;);</code></pre>
+<p>   }<br>   return plainText;<br>}</p>
+</li>
+</ul>
+<p>#pragma mark - 加密方法</p>
+<ul>
+<li><p>(NSData*)encryptlyf:(NSString*)plainText {<br>  NSData* data = [plainText dataUsingEncoding:NSUTF8StringEncoding];<br>  size_t plainTextBufferSize = [data length];<br>  const void *vplainText = (const void *)[data bytes];</p>
+<p>  CCCryptorStatus ccStatus;<br>  uint8_t *bufferPtr = NULL;<br>  size_t bufferPtrSize = 0;<br>  size_t movedBytes = 0;</p>
+<p>  bufferPtrSize = (plainTextBufferSize + kCCBlockSize3DES) &amp; ~(kCCBlockSize3DES - 1);<br>  bufferPtr = malloc( bufferPtrSize * sizeof(uint8_t));<br>  memset((void *)bufferPtr, 0x0, bufferPtrSize);</p>
+<p>  const void *vkey = (const void *) [gkey UTF8String];<br>  const void *vinitVec = (const void *) [gIv UTF8String];</p>
+<p>  ccStatus = CCCrypt(kCCEncrypt,</p>
+<pre><code>                 kCCAlgorithm3DES,
+                 kCCOptionPKCS7Padding,
+                 vkey,
+                 kCCKeySize3DES,
+                 vinitVec,
+                 vplainText,
+                 plainTextBufferSize,
+                 (void *)bufferPtr,
+                 bufferPtrSize,
+                 &amp;movedBytes);</code></pre>
+<p>  NSData *myData = [NSData dataWithBytes:(const void *)bufferPtr length:(NSUInteger)movedBytes];<br>  return myData;<br>}<br>// 解密方法</p>
+</li>
+<li><p>(NSString*)decryptlyf:(NSData*)encryptData {<br>  size_t plainTextBufferSize = [encryptData length];<br>  const void *vplainText = [encryptData bytes];</p>
+<p>  CCCryptorStatus ccStatus;<br>  uint8_t *bufferPtr = NULL;<br>  size_t bufferPtrSize = 0;<br>  size_t movedBytes = 0;</p>
+<p>  bufferPtrSize = (plainTextBufferSize + kCCBlockSize3DES) &amp; ~(kCCBlockSize3DES - 1);<br>  bufferPtr = malloc( bufferPtrSize * sizeof(uint8_t));<br>  memset((void *)bufferPtr, 0x0, bufferPtrSize);</p>
+<p>  const void *vkey = (const void *) [gkey UTF8String];<br>  const void *vinitVec = (const void *) [gIv UTF8String];</p>
+<p>  ccStatus = CCCrypt(kCCDecrypt,</p>
+<pre><code>                 kCCAlgorithm3DES,
+                 kCCOptionPKCS7Padding,
+                 vkey,
+                 kCCKeySize3DES,
+                 vinitVec,
+                 vplainText,
+                 plainTextBufferSize,
+                 (void *)bufferPtr,
+                 bufferPtrSize,
+                 &amp;movedBytes);</code></pre>
+<p>  NSString *result = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)bufferPtr</p>
+<pre><code>                                                               length:(NSUInteger)movedBytes] encoding:NSUTF8StringEncoding];</code></pre>
+<p>  return result;<br>}<br>@end</p>
+</li>
+</ul>
+<p>通过如下方法使用DES加密解密</p>
+<ul>
+<li><p>(void)createDES<br>{<br>  NSString *userName = @”helloworld”;<br>  NSString *str1 = [LYFDES encrypt:userName];<br>  NSLog(@”str1 == %@”,str1);<br>  NSString *str2 = [LYFDES decrypt:str1];<br>  NSLog(@”str2 == %@”,str2);</p>
+<p>  NSString *key = @”lyf”;<br>  NSString *encrypt=[LYFDES encryptUseDES:@”linyafei” key:key];//DES加密<br>  NSLog(@”encrypt = %@”, encrypt);<br>  NSString *decrypt=[LYFDES decryptUseDES:encrypt key:key];//DES解密<br>  NSLog(@”decrypt = %@”, decrypt);<br>}</p>
+</li>
+</ul> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

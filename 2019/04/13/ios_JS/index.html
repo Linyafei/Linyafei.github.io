@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="iOS 原生JS相互调用"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>iOS 原生JS相互调用 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">iOS 原生JS相互调用</div>
+  <div id="post_time">2019-04-13</div>
+
+  <div id="post_content"> <p>import UIKit<br>import WebKit</p>
+<p>class SwiftHTMLVC: UIViewController  {<br>    override func viewDidLoad() {<br>        super.viewDidLoad()<br>        self.view.backgroundColor = UIColor.orange<br>        self.createSwiftCallJSView()<br>        self.view.addSubview(webView)<br>    }<br>    func createSwiftCallJSView() {<br>        for i in 0..&lt;3 {<br>            let button = UIButton.init(type: UIButton.ButtonType.custom)<br>            button.frame = CGRect(x: 20, y: 100 + 50 * i, width: 100, height: 40)<br>            button.backgroundColor = UIColor.darkGray<br>            button.setTitle(“BUTTON”, for: UIControl.State.normal)<br>            button.tag = i<br>            button.addTarget(self, action: #selector(buttonClickEvent), for: UIControl.Event.touchUpInside)<br>            self.view.addSubview(button)<br>        }<br>    }<br>    @objc func buttonClickEvent(btn:UIButton) {<br>        if btn.tag == 0 {<br>            //changeColor()是JS方法名，completionHandler是异步回调block<br>            let jsString = String.init(“changeColor(‘abc’)”)<br>            webView.evaluateJavaScript(jsString) { (data:Any, error: Error?) in<br>                print(“===SwiftCallJS==1==”)<br>            }<br>        }else if btn.tag == 1 {<br>            //改变字体大小 调用原生JS方法<br>            let jsFont = String.init(“document.getElementsByTagName(‘h1’).innerHTML= ‘def’”)<br>            webView.evaluateJavaScript(jsFont) { (data:Any, error: Error?) in<br>                print(“===SwiftCallJS==2==”)<br>            }<br>        }else{<br>            webView.evaluateJavaScript(“multiParamFunc(‘abc’,’123’)”) { (data:Any, error: Error?) in<br>                print(“===SwiftCallJS==3==”)<br>            }<br>        }<br>    }<br>    lazy var webView: WKWebView = {<br>       //偏好设置<br>       let preferences = WKPreferences()<br>       preferences.javaScriptEnabled = true<br>       let configuration = WKWebViewConfiguration()<br>       configuration.preferences = preferences<br>       configuration.selectionGranularity = WKSelectionGranularity.character<br>       configuration.userContentController = WKUserContentController()<br>       // 给webview与swift交互起名字，webview给swift发消息的时候会用到<br>       //configuration.userContentController.add(WeakJavaScriptDelegate(self), name: “logger”)<br>       configuration.userContentController.add(WeakJavaScriptDelegate(self), name: “jsCallSwiftSwiftFuncNoParam”)<br>       configuration.userContentController.add(WeakJavaScriptDelegate(self), name: “jsCallSwiftSwiftFuncHasParam”)<br>       configuration.userContentController.add(WeakJavaScriptDelegate(self), name: “jsCallSwiftSwiftFuncIntParam”)<br>       configuration.userContentController.add(WeakJavaScriptDelegate(self), name: “jsCallSwiftSwiftFuncDictParam”)<br>       configuration.userContentController.add(WeakJavaScriptDelegate(self), name: “jsCallSwiftSwiftFuncArrayParam”)<br>       var webView = WKWebView(frame: CGRect(x: 10,y: 250,width: 340,height: 600),configuration: configuration)<br>       // 让webview翻动有回弹效果<br>       webView.scrollView.bounces = true<br>       // 只允许webview上下滚动<br>       webView.scrollView.alwaysBounceVertical = true<br>       webView.navigationDelegate = self<br>       webView.uiDelegate = self;<br>       let HTMLPath: String<br>       do {<br>           ///加载本地html文件<br>           HTMLPath = try String(contentsOfFile: Bundle.main.path(forResource: “JS”, ofType: “html”)!,encoding: String.Encoding.utf8)<br>       } catch let error {<br>           print(error)<br>           HTMLPath = “”<br>       }<br>       webView.loadHTMLString(HTMLPath, baseURL: nil)<br>       return webView<br>    }()<br>    //接收JS的调用<br>    func jsCallSwiftSwiftFuncInSwiftNoParam() {<br>        print(“Swift没有从JS接收参数”)<br>    }<br>    func jsCallSwiftSwiftFuncInSwiftHasParam(string: String) {<br>        print(“Swift从JS接收字符串 (string)”)<br>    }<br>    func jsCallSwiftSwiftFuncInSwiftIntParam(int: Int) {<br>        print(“Swift从JS接收Int (int)”)<br>    }<br>    func jsCallSwiftSwiftFuncInSwiftDictParam(dict: Dictionary&lt;String, String&gt;) {<br>        print(“Swift从JS接收Array(String(describing: dict[“aa”]))==(String(describing: dict[“bb”]))==(String(describing: dict[“cc”]))”)<br>    }<br>    func jsCallSwiftSwiftFuncInSwiftArrayParam(array: [String]) {<br>        for str in array {<br>            print(“Swift从JS接收Array (str)”)<br>        }<br>    }<br>    deinit {<br>        print(“被释放”)<br>        //移除注册的js方法<br>        webView.configuration.userContentController.removeScriptMessageHandler(forName: “jsCallSwiftSwiftFuncNoParam”)<br>        webView.configuration.userContentController.removeScriptMessageHandler(forName: “jsCallSwiftSwiftFuncHasParam”)<br>        webView.configuration.userContentController.removeScriptMessageHandler(forName: “jsCallSwiftSwiftFuncIntParam”)<br>        webView.configuration.userContentController.removeScriptMessageHandler(forName: “jsCallSwiftSwiftFuncDictParam”)<br>        webView.configuration.userContentController.removeScriptMessageHandler(forName: “jsCallSwiftSwiftFuncArrayParam”)<br>    }<br>}<br>extension SwiftHTMLVC: WKUIDelegate {<br>    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -&gt; Void) {<br>        print(“=====message==(message)=====”)<br>        let alertController = UIAlertController.init(title: “提示”, message: “Alert信息”, preferredStyle: UIAlertController.Style.alert)<br>        alertController.addAction(UIAlertAction.init(title: “确定”, style: UIAlertAction.Style.default, handler: { (alertAction: UIAlertAction) in<br>            completionHandler()<br>        }))<br>        alertController.addAction(UIAlertAction.init(title: “取消”, style: UIAlertAction.Style.cancel, handler: { (alertAction: UIAlertAction) in<br>            completionHandler()<br>        }))<br>        self.present(alertController, animated: true, completion: nil)<br>    }<br>    func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -&gt; Void) {<br>        let alertController = UIAlertController.init(title: “提示”, message: “Confirm信息”, preferredStyle: UIAlertController.Style.alert)<br>        alertController.addAction(UIAlertAction.init(title: “确定”, style: UIAlertAction.Style.default, handler: { (alertAction: UIAlertAction) in<br>            completionHandler(true)<br>        }))<br>        alertController.addAction(UIAlertAction.init(title: “取消”, style: UIAlertAction.Style.cancel, handler: { (alertAction: UIAlertAction) in<br>            completionHandler(false)<br>        }))<br>        self.present(alertController, animated: true, completion: nil)<br>    }<br>    func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -&gt; Void) {<br>        let alertController = UIAlertController.init(title: “提示”, message: “TextInput信息”, preferredStyle: UIAlertController.Style.alert)<br>        alertController.addTextField { (textField: UITextField) in<br>            textField.text = defaultText;<br>        }<br>        alertController.addAction(UIAlertAction.init(title: “abc”, style: UIAlertAction.Style.default, handler: { (alertAction:UIAlertAction) in<br>            completionHandler(alertController.textFields![0].text)<br>        }))<br>        self.present(alertController, animated: true, completion: nil)<br>    }<br>    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -&gt; WKWebView? {<br>        if !navigationAction.targetFrame!.isMainFrame {<br>            webView.load(navigationAction.request)<br>        }<br>        return nil<br>    }<br>}<br>extension SwiftHTMLVC: WKNavigationDelegate {<br>    ///在网页加载完成时调用js方法<br>    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {<br>        webView.evaluateJavaScript(“sayHello(‘js你好,我是从Swift传来的’)”, completionHandler: nil)<br>    }<br>    @available(iOS 13.0, *)<br>    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -&gt; Void) {<br>        let urlStr = navigationAction.request.url?.absoluteString<br>        print(“=========(String(describing: urlStr))=======”)<br>        let htmlHeadString = “github://“<br>        if (urlStr?.hasPrefix(htmlHeadString))! {<br>            let alertController = UIAlertController.init(title: “提示”, message: “decidePolicyFor信息”, preferredStyle: UIAlertController.Style.alert)<br>            alertController.addAction(UIAlertAction.init(title: “取消”, style: UIAlertAction.Style.cancel, handler: { (alertAction: UIAlertAction) in<br>            }))<br>            alertController.addAction(UIAlertAction.init(title: “确定”, style: UIAlertAction.Style.default, handler: { (alertAction: UIAlertAction) in<br>                print(“url ===== (String(describing: urlStr))”)<br>                let url:URL = URL(string: (urlStr?.replacingOccurrences(of: “github://callName_?”, with: “”))!)!<br>                print(“url ===== (url)”)<br>                UIApplication.shared.open(url, options: [:], completionHandler: nil)<br>            }))<br>            self.present(alertController, animated: true, completion: nil)<br>            decisionHandler(WKNavigationActionPolicy.cancel, WKWebpagePreferences.init())<br>        }else{<br>            decisionHandler(WKNavigationActionPolicy.allow, WKWebpagePreferences.init())<br>        }<br>    }<br>    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -&gt; Void) {<br>        let urlStr = navigationResponse.response.url?.absoluteString<br>        print(“====(String(describing: urlStr))===”)<br>        decisionHandler(WKNavigationResponsePolicy.allow)<br>    }<br>    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -&gt; Void) {<br>        let newCred = URLCredential.init(user: “userlyf”, password: “pwd123”, persistence: URLCredential.Persistence.none)<br>        challenge.sender?.use(newCred, for: challenge)<br>        completionHandler(URLSession.AuthChallengeDisposition.useCredential,newCred)<br>    }<br>}<br>extension SwiftHTMLVC: WKScriptMessageHandler {<br>    ///接收js调用方法<br>    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {<br>        ///在控制台中打印html中console.log的内容,方便调试<br>        let body = message.body<br>        if message.name == “logger” {<br>            print(“JS log:(body)”)<br>            return<br>        }<br>        ///message.name是约定好的方法名,message.body是携带的参数<br>        switch message.name {<br>        case “jsCallSwiftSwiftFuncNoParam”:<br>            ///不接收参数时直接不处理message.body即可,不用管Html传了什么<br>            jsCallSwiftSwiftFuncInSwiftNoParam()<br>        case “jsCallSwiftSwiftFuncHasParam”:<br>            jsCallSwiftSwiftFuncInSwiftHasParam(string: message.body as? String ?? “”)<br>        case “jsCallSwiftSwiftFuncIntParam”:<br>            jsCallSwiftSwiftFuncInSwiftIntParam(int: message.body as? Int ?? 0)<br>        case “jsCallSwiftSwiftFuncDictParam”:<br>            jsCallSwiftSwiftFuncInSwiftDictParam(dict: message.body as! Dictionary&lt;String, String&gt;)<br>        case “jsCallSwiftSwiftFuncArrayParam”:<br>            jsCallSwiftSwiftFuncInSwiftArrayParam(array: message.body as? [String] ?? [])<br>        default:<br>            break<br>        }<br>    }<br>}</p>
+<p>import UIKit<br>import WebKit</p>
+<p>class WeakJavaScriptDelegate: NSObject ,WKScriptMessageHandler {<br>    weak var scriptDelegate: WKScriptMessageHandler?<br>    init(_ scriptDelegate: WKScriptMessageHandler) {<br>        self.scriptDelegate = scriptDelegate<br>        super.init()<br>    }<br>    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {<br>        scriptDelegate?.userContentController(userContentController, didReceive: message)<br>    }<br>    deinit {<br>        print(“WeakScriptMessageDelegate is deinit”)<br>    }</p>
+<p>}</p>
+<p>import UIKit<br>import WebKit</p>
+<p>class WebViewProgressVC: UIViewController , WKNavigationDelegate,WKUIDelegate,UINavigationControllerDelegate {<br>    var wk:WKWebView!<br>    var progBar:UIProgressView!    //定义的进度条<br>    override func viewDidLoad() {<br>        super.viewDidLoad()<br>        // Do any additional setup after loading the view.<br>        self.view.backgroundColor = UIColor.lightGray<br>        self.wk = WKWebView(frame: self.view.frame)<br>        let theConfiguration = WKWebViewConfiguration()<br>        theConfiguration.userContentController = WKUserContentController() // 通过js与webview内容交互配置<br>        let  frame = CGRect(x: 20,y : 100, width: self.view.frame.width - 40, height:self.view.frame.height-120) //定位wk位置<br>        wk = WKWebView(frame: frame, configuration: theConfiguration)<br>        wk.allowsLinkPreview = true<br>        //self.wk.load(NSURLRequest(url:NSURL(string:”<a target="_blank" rel="noopener" href="http://www.baidu.com&quot;/">http://www.baidu.com&quot;</a>)! as URL) as URLRequest) //要在info.plist中添加对http的支持<br>        self.wk.load(NSURLRequest(url:NSURL(string:”<a target="_blank" rel="noopener" href="https://cn.bing.com&quot;/">https://cn.bing.com&quot;</a>)! as URL) as URLRequest) //要在info.plist中添加对http的支持<br>        self.view.addSubview(self.wk)<br>        // add your self view here<br>        // add back &lt;- icon to back to previous page<br>        self.wk.uiDelegate = self //实现协议，进度条和获取网页标题需要用到<br>        self.wk.navigationDelegate = self //网页间前进后退要用到<br>        //生成进度条<br>        progBar = UIProgressView(frame: CGRect(x: 20, y: 85, width: self.view.frame.width - 40, height: 30))<br>        progBar.progress = 0.0<br>        progBar.tintColor = UIColor.red<br>        progBar.backgroundColor = UIColor.darkGray;<br>        self.view.addSubview(progBar)<br>        //注册进度条监听事件<br>        self.wk.addObserver(self, forKeyPath: “estimatedProgress”, options: NSKeyValueObservingOptions.new, context: nil)<br>        //注册网页标题监听事件<br>        self.wk.addObserver(self, forKeyPath: “title”, options: NSKeyValueObservingOptions.new, context: nil)<br>    }<br>    //这里添加了estimatedProgrees和title两个监听事件<br>    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {<br>           if keyPath == “estimatedProgress” {<br>               self.progBar.alpha = 1.0<br>               progBar.setProgress(Float(wk.estimatedProgress), animated: true)<br>               if(self.wk.estimatedProgress &gt;= 1.0){<br>                UIView.animate(withDuration: 0.3, delay: 0.1, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -&gt; Void in<br>                       self.progBar.alpha = 0.0<br>                   }, completion: { (finished:Bool) -&gt; Void in<br>                       self.progBar.progress = 0<br>                   })<br>               }<br>           } else if keyPath == “title” {<br>//               self.titleForWeb.title = self.wk.title //这里titleForWeb是我自己定义的一个导航bar<br>//               print(wk.title!)<br>            print(self.wk.title ?? “lyf”);<br>           }<br>    }<br>    override func viewWillDisappear(_ animated: Bool) {<br>        wk.removeObserver(self, forKeyPath: “estimatedProgress”)<br>        wk.removeObserver(self, forKeyPath: “title”)<br>    }<br>}</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

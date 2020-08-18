@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="单链表"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>单链表 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">单链表</div>
+  <div id="post_time">2019-07-21</div>
+
+  <div id="post_content"> <p>public class SingleLinkedList {<br>    private int size;//链表节点的个数<br>    private Node head;//头节点<br>    //<br>    public SingleLinkedList(){<br>        size = 0;<br>        head = null;<br>    }<br>    //链表的每个节点类<br>    private class Node{<br>        private Object data;//每个节点的数据<br>        private Node next;//每个节点指向下一个节点的连接<br>        public Node(Object data){<br>            this.data = data;<br>        }<br>    }<br>    //在链表头添加元素<br>    public Object addHead(Object obj){<br>        Node newHead = new Node(obj);<br>        if(size == 0){<br>            head = newHead;<br>        }else{<br>            newHead.next = head;<br>            head = newHead;<br>        }<br>        size++;<br>        return obj;<br>    }<br>    //在链表头删除元素<br>    public Object deleteHead(){<br>        Object obj = head.data;<br>        head = head.next;<br>        size–;<br>        return obj;<br>    }<br>    //查找指定元素，找到了返回节点Node，找不到返回null<br>    public Node find(Object obj){<br>        Node current = head;<br>        int tempSize = size;<br>        while(tempSize &gt; 0){<br>            if(obj.equals(current.data)){<br>                return current;<br>            }else{<br>                current = current.next;<br>            }<br>            tempSize–;<br>        }<br>        return null;<br>    }<br>    //删除指定的元素，删除成功返回true<br>    public boolean delete(Object value){<br>        if(size == 0){<br>            return false;<br>        }<br>        Node current = head;<br>        Node previous = head;<br>        while(current.data != value){<br>            if(current.next == null){<br>                return false;<br>            }else{<br>                previous = current;<br>                current = current.next;<br>            }<br>        }<br>        //如果删除的节点是第一个节点<br>        if(current == head){<br>            head = current.next;<br>            size–;<br>        }else{//删除的节点不是第一个节点<br>            previous.next = current.next;<br>            size–;<br>        }<br>        return true;<br>    }<br>    //判断链表是否为空<br>    public boolean isEmpty(){<br>        return (size == 0);<br>    }<br>    //显示节点信息<br>    public void display(){<br>        if(size &gt;0){<br>            Node node = head;<br>            int tempSize = size;<br>            if(tempSize == 1){//当前链表只有一个节点<br>                System.out.println(“[“+node.data+”]”);<br>                return;<br>            }<br>            while(tempSize&gt;0){<br>                if(node.equals(head)){<br>                    System.out.print(“[“+node.data+”-&gt;”);<br>                }else if(node.next == null){<br>                    System.out.print(node.data+”]”);<br>                }else{<br>                    System.out.print(node.data+”-&gt;”);<br>                }<br>                node = node.next;<br>                tempSize–;<br>            }<br>            System.out.println();<br>        }else{//如果链表一个节点都没有，直接打印[]<br>            System.out.println(“[]”);<br>        }<br>    }<br>}</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

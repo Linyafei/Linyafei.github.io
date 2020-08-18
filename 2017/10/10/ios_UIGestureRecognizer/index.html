@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="手势拖动"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>手势拖动 - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">手势拖动</div>
+  <div id="post_time">2017-10-10</div>
+
+  <div id="post_content"> <p>import UIKit</p>
+<p>class UIGestureRecognizerVC: UIViewController {<br>    var swipeRecognizer: UISwipeGestureRecognizer!<br>    var rotationRecognizer: UIRotationGestureRecognizer!<br>    var rotationAngleInRadians = 0.0 as CGFloat<br>    var helloWorldLabel: UILabel!<br>    var panRecognizer: UIPanGestureRecognizer!<br>    var longPressRecognizer: UILongPressGestureRecognizer!<br>    var dummyButton: UIButton!<br>    var tapGestureRecognizer: UITapGestureRecognizer!<br>    var pinchGestureRecognizer: UIPinchGestureRecognizer!<br>    var myBlackLabel: UILabel!<br>    var currentScale = 0.0 as CGFloat<br>    var screenEdgePanGesture: UIScreenEdgePanGestureRecognizer!<br>    override func viewDidLoad() {<br>        super.viewDidLoad()<br>        // Do any additional setup after loading the view.<br>        createSwipeGestureRecognizer()<br>        createRotationGestureRecognizer()<br>        createPanGestureRecognizer()<br>        createLongPressGestureRecognizer()<br>        createTapGestureRecognizer()<br>        createPinchGestureRecognizer()<br>        createScreenEdgePanGestureRecognizer()<br>    }<br>    func createScreenEdgePanGestureRecognizer() {<br>        screenEdgePanGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleScreenEdgePanGesture(sender:)))<br>        screenEdgePanGesture.edges = .left<br>        self.view.addGestureRecognizer(screenEdgePanGesture)<br>    }<br>    @objc func handleScreenEdgePanGesture(sender: UIScreenEdgePanGestureRecognizer) {<br>        if sender.state == .ended {<br>            displayAlertWithTitle(title: “Detected”, message: “Edge swipe was detected”)<br>        }<br>    }<br>    func displayAlertWithTitle(title: String,message: String) {<br>        let controller = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)<br>        controller.addAction(UIAlertAction(title: “OK”, style: UIAlertActionStyle.default, handler: nil))<br>        present(controller, animated: true, completion: nil)<br>    }<br>    func createPinchGestureRecognizer() {<br>        myBlackLabel = UILabel.init(frame: CGRect(x: 0, y: 0, width: 200, height: 200))<br>        myBlackLabel.isUserInteractionEnabled = true<br>        myBlackLabel.backgroundColor = UIColor.yellow<br>        myBlackLabel.center = self.view.center<br>        self.view.addSubview(myBlackLabel)<br>        pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(sender:)))<br>        myBlackLabel.addGestureRecognizer(pinchGestureRecognizer)<br>    }<br>    @objc func handlePinchGesture(sender: UIPinchGestureRecognizer) {<br>        if sender.state == .ended {<br>            currentScale = sender.scale<br>        }else if sender.state == .began &amp;&amp; currentScale != 0.0 {<br>            sender.scale = currentScale<br>        }<br>        if sender.scale != 0.0 {<br>            sender.view?.transform = CGAffineTransform(scaleX: sender.scale, y: sender.scale)<br>        }<br>    }<br>    func createTapGestureRecognizer() {<br>        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGestureRecognizer(sender:)))<br>        tapGestureRecognizer.numberOfTouchesRequired = 1<br>        tapGestureRecognizer.numberOfTapsRequired = 1<br>        self.view.addGestureRecognizer(tapGestureRecognizer)<br>    }<br>    @objc func handleTapGestureRecognizer(sender: UITapGestureRecognizer) {<br>        for touchCounter in 0..&lt;sender.numberOfTapsRequired {<br>            let touchPoint = sender.location(ofTouch: touchCounter, in: sender.view)<br>            print(“Touch (touchCounter)==(touchPoint.x)==”)<br>        }<br>    }<br>    func createLongPressGestureRecognizer() {<br>        dummyButton = UIButton(type: UIButtonType.system)<br>        dummyButton.frame = CGRect(x: 0, y: 0, width: 72, height: 37)<br>        dummyButton.setTitle(“My Button”, for: UIControlState.normal)<br>        dummyButton.center = view.center<br>        self.view.addSubview(dummyButton);<br>        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(sender:)))<br>        longPressRecognizer.numberOfTapsRequired = 2<br>        longPressRecognizer.allowableMovement = 100<br>        longPressRecognizer.minimumPressDuration = 1<br>        dummyButton.addGestureRecognizer(longPressRecognizer)<br>    }<br>    @objc func handleLongPressGesture(sender: UILongPressGestureRecognizer) {<br>        if sender.numberOfTouches == 2 {<br>            let touchPoint1 = sender.location(ofTouch: 0, in: sender.view)<br>            let touchPoint2 = sender.location(ofTouch: 1, in: sender.view)<br>            let midPointX = (touchPoint1.x + touchPoint2.x)/2<br>            let midPointY = (touchPoint1.y + touchPoint2.y)/2<br>            let midPoint = CGPoint(x: midPointX, y: midPointY)<br>            dummyButton.center = midPoint<br>        }else{<br>            let controller = UIAlertController(title: “Two fingers”, message: “Please use two fingers”, preferredStyle: .alert)<br>            controller.addAction(UIAlertAction(title: “OK”, style: .default, handler: nil))<br>            present(controller, animated: true, completion: nil)<br>        }<br>    }<br>    func createPanGestureRecognizer() {<br>        helloWorldLabel = UILabel.init(frame: CGRect(x: 0, y: 0, width: 150, height: 100))<br>        helloWorldLabel.isUserInteractionEnabled = true<br>        helloWorldLabel.text = “Hello, World!”<br>        helloWorldLabel.textColor = UIColor.darkGray<br>        helloWorldLabel.textAlignment = .center<br>        helloWorldLabel.font = UIFont.systemFont(ofSize: 16)<br>        helloWorldLabel.backgroundColor = UIColor.yellow<br>        self.view.addSubview(helloWorldLabel)<br>        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGestureRecognizer(sender:)))<br>        panRecognizer.minimumNumberOfTouches = 1<br>        panRecognizer.maximumNumberOfTouches = 1<br>        self.view.addGestureRecognizer(panRecognizer)<br>    }<br>    @objc func handlePanGestureRecognizer(sender: UIRotationGestureRecognizer) {<br>        if sender.state != .ended &amp;&amp; sender.state != .failed {<br>            let location = sender.location(in: sender.view?.superview)<br>            //sender.view?.center = location<br>            helloWorldLabel.center = location<br>        }<br>    }<br>    func createRotationGestureRecognizer() {<br>        helloWorldLabel = UILabel.init(frame: CGRect(x: 0, y: 0, width: 100, height: 80))<br>        helloWorldLabel.text = “Hello, World!”<br>        helloWorldLabel.font = UIFont.systemFont(ofSize: 16)<br>        helloWorldLabel.sizeToFit()<br>        helloWorldLabel.center = view.center<br>        helloWorldLabel.backgroundColor = UIColor.yellow<br>        self.view.addSubview(helloWorldLabel)<br>        rotationRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(sender:)))<br>        self.view.addGestureRecognizer(rotationRecognizer)<br>    }<br>    @objc func handleRotation(sender: UIRotationGestureRecognizer) {<br>        helloWorldLabel.transform = CGAffineTransform.init(rotationAngle: rotationAngleInRadians + sender.rotation)<br>        if sender.state == .ended {<br>            rotationAngleInRadians += sender.rotation<br>        }<br>    }<br>    func createSwipeGestureRecognizer() {<br>        swipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(sender:)))<br>        swipeRecognizer.direction = .left<br>        swipeRecognizer.numberOfTouchesRequired = 1<br>        self.view.addGestureRecognizer(swipeRecognizer)<br>    }<br>    @objc func handleSwipes(sender: UISwipeGestureRecognizer) {<br>        if sender.direction == .down {<br>            print(“Swiped Down”)<br>        }<br>        if sender.direction == .left {<br>            print(“Swiped Left”)<br>        }<br>        if sender.direction == .right {<br>            print(“Swiped Right”)<br>        }<br>        if sender.direction == .up {<br>            print(“Swiped Up”)<br>        }<br>    }<br>}</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+

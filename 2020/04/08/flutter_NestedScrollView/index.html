@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html id="layout_html">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Description-->
+  
+    <meta name="description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累">
+  
+
+  <!--Author-->
+  
+    <meta name="author" content="LYF">
+  
+
+  <!--Open Graph Title-->
+  
+    <meta property="og:title" content="NestedScrollView"/>
+  
+
+  <!--Open Graph Description-->
+  
+    <meta property="og:description" content="个人博客用于记录自己学习iOS，Flutter，Java，Dart的日常积累" />
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="linyafei&#39;s blog"/>
+
+  <!--Type page-->
+  
+    <meta property="og:type" content="article" />
+  
+
+  <!--Page Cover-->
+  
+
+  <meta name="twitter:card" content="summary" />
+  
+
+  <!-- Title -->
+  
+  <title>NestedScrollView - linyafei&#39;s blog</title>
+
+  <!-- Tachyons Core CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+
+  <!-- Custom Fonts -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+
+<body id="layout_body">
+    <header id="layout_header">
+        
+<div id="header_background_image">
+    <div id="header_nav_list">
+      
+        <a id="header_nav_link"
+        href="/">
+            
+                主页
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/archives">
+            
+                归档
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/categories">
+            
+                分类
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/tags">
+            
+                标签
+            
+        </a>
+      
+        <a id="header_nav_link"
+        href="/about.html">
+            
+                关于
+            
+        </a>
+      
+    </div>
+
+    <div id="header_title">
+        <span>林亚飞的博客</span>
+    </div>
+    <div id="header_subtitle">
+         <span>记录自己前进的每一步足迹</span>
+    </div>
+
+</div>
+
+    </header>
+
+    <main id="layout_main">
+        
+<article id="post_background">
+  <div id="post_title">NestedScrollView</div>
+  <div id="post_time">2020-04-08</div>
+
+  <div id="post_content"> <p>import ‘package:flutter/material.dart’;</p>
+<p>class MyNestedScrollView extends StatefulWidget {<br>  MyNestedScrollView({Key key, this.title}) : super(key: key);<br>  final String title;</p>
+<p>  @override<br>  _MyHomePageState createState() =&gt; _MyHomePageState();<br>}</p>
+<p>class _MyHomePageState extends State<MyNestedScrollView> {<br>  Choice _selectedChoice = choices[0]; // The app’s “state”.</p>
+<p>  void _select(Choice choice) {<br>    setState(() {<br>      // Causes the app to rebuild with the new _selectedChoice.<br>      _selectedChoice = choice;<br>    });<br>  }</p>
+<p>  @override<br>  Widget build(BuildContext context) {<br>    return DefaultTabController(<br>        length: choices.length,<br>        child: Scaffold(<br>            body: NestedScrollView(<br>          headerSliverBuilder: _headerSliverBuilder,<br>          body: TabBarView(<br>            children: choices.map((Choice choice) {<br>              return new Padding(<br>                padding: const EdgeInsets.all(16.0),<br>                child: new ChoiceCard(choice: choice),<br>              );<br>            }).toList(),<br>          ),<br>        )));<br>  }</p>
+<p>  List<Widget> _headerSliverBuilder(<br>      BuildContext context, bool innerBoxIsScrolled) {<br>    return <Widget>[<br>      SliverAppBar(<br>        //1.在标题左侧显示的一个控件，在首页通常显示应用的 logo；在其他界面通常显示为返回按钮<br>        leading: Icon(_selectedChoice.icon),<br>        //2. ? 控制是否应该尝试暗示前导小部件为null<br>        automaticallyImplyLeading: true,<br>        //3.当前界面的标题文字<br>        title: Text(_selectedChoice.title),<br>        //4.一个 Widget 列表，代表 Toolbar 中所显示的菜单，对于常用的菜单，通常使用 IconButton 来表示；<br>        //对于不常用的菜单通常使用 PopupMenuButton 来显示为三个点，点击后弹出二级菜单<br>        actions: <Widget>[<br>          new IconButton(<br>            // action button<br>            icon: new Icon(choices[0].icon),<br>            onPressed: () {<br>              _select(choices[0]);<br>            },<br>          ),<br>          new IconButton(<br>            // action button<br>            icon: new Icon(choices[1].icon),<br>            onPressed: () {<br>              _select(choices[1]);<br>            },<br>          ),<br>          new PopupMenuButton<Choice>(<br>            // overflow menu<br>            onSelected: _select,<br>            itemBuilder: (BuildContext context) {<br>              return choices.skip(2).map((Choice choice) {<br>                return new PopupMenuItem<Choice>(<br>                  value: choice,<br>                  child: new Text(choice.title),<br>                );<br>              }).toList();<br>            },<br>          )<br>        ],<br>        //5.一个显示在 AppBar 下方的控件，高度和 AppBar 高度一样，<br>        // 可以实现一些特殊的效果，该属性通常在 SliverAppBar 中使用<br>        flexibleSpace: FlexibleSpaceBar(<br>          centerTitle: true,<br>          background: Image(<br>            image: NetworkImage(<br>                “<a target="_blank" rel="noopener" href="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551944816841&amp;di=329f747e3f4c2554f24c609fd6f77c49&amp;imgtype=0&amp;src=http://img.tupianzj.com/uploads/allimg/160610/9-160610114520.jpg&quot;">https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551944816841&amp;di=329f747e3f4c2554f24c609fd6f77c49&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.tupianzj.com%2Fuploads%2Fallimg%2F160610%2F9-160610114520.jpg&quot;</a>),<br>            fit: BoxFit.cover,<br>          ),<br>        ),<br>        //6.一个 AppBarBottomWidget 对象，通常是 TabBar。用来在 Toolbar 标题下面显示一个 Tab 导航栏<br>        bottom: new TabBar(<br>          isScrollable: true,<br>          tabs: choices.map((Choice choice) {<br>            return new Tab(<br>              text: choice.title,<br>              icon: new Icon(choice.icon),<br>            );<br>          }).toList(),<br>        ),<br>        //7.? 材料设计中控件的 z 坐标顺序，默认值为 4，对于可滚动的 SliverAppBar，<br>        // 当 SliverAppBar 和内容同级的时候，该值为 0， 当内容滚动 SliverAppBar 变为 Toolbar 的时候，修改 elevation 的值<br>        elevation: 1,<br>        //APP bar 的颜色，默认值为 ThemeData.primaryColor。改值通常和下面的三个属性一起使用<br>        backgroundColor: Colors.red,<br>        //App bar 的亮度，有白色和黑色两种主题，默认值为 ThemeData.primaryColorBrightness<br>        brightness: Brightness.light,<br>        //App bar 上图标的颜色、透明度、和尺寸信息。默认值为 ThemeData().primaryIconTheme<br>        iconTheme: ThemeData().primaryIconTheme,<br>        //App bar 上的文字主题。默认值为 ThemeData（）.primaryTextTheme<br>        textTheme: ThemeData().accentTextTheme,<br>        //此应用栏是否显示在屏幕顶部<br>        primary: true,<br>        //标题是否居中显示，默认值根据不同的操作系统，显示方式不一样,true居中 false居左<br>        centerTitle: true,<br>        //横轴上标题内容 周围的间距<br>        titleSpacing: NavigationToolbar.kMiddleSpacing,<br>        //展开高度<br>        expandedHeight: 200,<br>        //是否随着滑动隐藏标题<br>        floating: true,<br>        //tab 是否固定在顶部<br>        pinned: true,<br>        //与floating结合使用<br>        snap: true,<br>      )<br>    ];<br>  }<br>}</p>
+<p>class Choice {<br>  const Choice({this.title, this.icon});<br>  final String title;<br>  final IconData icon;<br>}</p>
+<p>const List<Choice> choices = const <Choice>[<br>  const Choice(title: ‘Car’, icon: Icons.directions_car),<br>  const Choice(title: ‘Bicycle’, icon: Icons.directions_bike),<br>  const Choice(title: ‘Boat’, icon: Icons.directions_boat),<br>  const Choice(title: ‘Bus’, icon: Icons.directions_bus),<br>  const Choice(title: ‘Train’, icon: Icons.directions_railway),<br>  const Choice(title: ‘Walk’, icon: Icons.directions_walk),<br>];</p>
+<p>class ChoiceCard extends StatelessWidget {<br>  const ChoiceCard({Key key, this.choice}) : super(key: key);</p>
+<p>  final Choice choice;</p>
+<p>  @override<br>  Widget build(BuildContext context) {<br>    final TextStyle textStyle = Theme.of(context).textTheme.display1;<br>    Widget _itemBuilder(BuildContext context, int index) {<br>      return ListTile(<br>        leading: Icon(choice.icon),<br>        title: Text(“this is a “ + choice.title),<br>      );<br>    }<br>    return new Card(<br>      color: Colors.white,<br>      child: Center(<br>        child: ListView.builder(<br>          itemBuilder: _itemBuilder,<br>          itemCount: 30,<br>        ),<br>      ),<br>    );<br>  }<br>}</p> </div>
+</article>
+
+    </main>
+
+    <footer id="layout_footer">
+        
+<div id="footer_background">
+    <div id="footer_copyright">© Created by linyafei | 2020.</div>
+    <div id="footer_copyright">Powered by Hexo | theme Sanjiantang</div>
+</div>
+
+    </footer>
+</body>
+</html>
+
